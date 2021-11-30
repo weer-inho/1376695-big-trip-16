@@ -6,8 +6,11 @@ import {createTripEventsListItemEditTemplate} from './view/trip-events-list-item
 import {createTripEventsListItemTemplate} from './view/trip-event-list-item.js';
 import {RenderPosition, renderTemplate} from './render.js';
 import { createPageHeaderTemplate } from './view/page-header.js';
+import { createNavigationTemplate } from './view/menu-navigation.js';
 
-const renderTripNavigation = (container)=>{throw new Error(!!container);};
+const renderTripNavigation = (container)=>{
+  renderTemplate(container, createNavigationTemplate());
+};
 const renderTripFilter = (container)=>{throw new Error(!!container);};
 const renderPageHeader = (body) => {
   renderTemplate(body,createPageHeaderTemplate());
