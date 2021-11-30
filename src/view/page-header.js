@@ -3,6 +3,8 @@ export const createPageHeaderTemplate = ()=>(`<header class="page-header">
   <img class="page-header__logo" src="img/logo.png" width="42" height="42" alt="Trip logo">
 
   <div class="trip-main">
+    <section class="trip-main__trip-info  trip-info">        
+    </section>
     <div class="trip-main__trip-controls  trip-controls">
       <div class="trip-controls__navigation">
         <h2 class="visually-hidden">Switch trip view</h2>

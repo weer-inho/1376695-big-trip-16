@@ -7,13 +7,23 @@ import {createTripEventsListItemTemplate} from './view/trip-event-list-item.js';
 import {RenderPosition, renderTemplate} from './render.js';
 import { createPageHeaderTemplate } from './view/page-header.js';
 import { createNavigationTemplate } from './view/menu-navigation.js';
+import { createTripCostTemplate } from './view/trip-info-cost.js';
+import { createTripInfoMainTemplate } from './view/trip-info-main.js';
+
+const renderTripInfo = (container)=>{
+  renderTemplate(container,createTripInfoMainTemplate());
+  renderTemplate(container,createTripCostTemplate());
+};
 
 const renderTripNavigation = (container)=>{
   renderTemplate(container, createNavigationTemplate());
 };
-const renderTripFilter = (container)=>{throw new Error(!!container);};
+const renderTripFilter = (container)=>{
+  renderTemplate(container, createSiteFiltersTemplate());
+};
 const renderPageHeader = (body) => {
   renderTemplate(body,createPageHeaderTemplate());
+  renderTripInfo(body.querySelector('.trip-main__trip-info'));
   renderTripNavigation(body.querySelector('.trip-controls__navigation'));
   renderTripFilter(body.querySelector('.trip-controls__filters'));
 };
