@@ -5,8 +5,23 @@ import {createTripEventsList} from './view/trip-events-list.js';
 import {createTripEventsListItemEditTemplate} from './view/trip-events-list-item-edit.js';
 import {createTripEventsListItemTemplate} from './view/trip-event-list-item.js';
 import {RenderPosition, renderTemplate} from './render.js';
+import { createPageHeaderTemplate } from './view/page-header.js';
+
+const renderTripNavigation = (container)=>{throw new Error(!!container);};
+const renderTripFilter = (container)=>{throw new Error(!!container);};
+const renderPageHeader = (body) => {
+  renderTemplate(body,createPageHeaderTemplate());
+  renderTripNavigation(body.querySelector('.trip-controls__navigation'));
+  renderTripFilter(body.querySelector('.trip-controls__filters'));
+};
+
+const renderPageMain = (body)=>{
+  throw new Error(!!body);
+};
 
 const renderPage = (body) => {
+  renderPageHeader(body);
+  renderPageMain(body);
   const siteMainElement = body.querySelector('.trip-main');
 
   renderTemplate(siteMainElement, createSiteInfoTemplate(), RenderPosition.AFTERBEGIN);
