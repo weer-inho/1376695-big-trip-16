@@ -9,6 +9,7 @@ import { createNavigationTemplate } from './view/menu-navigation.js';
 import { createTripCostTemplate } from './view/trip-info-cost.js';
 import { createTripInfoMainTemplate } from './view/trip-info-main.js';
 import { createPageMainTemplae } from './view/page-main.js';
+import './mock/trip.js';
 
 const renderTripInfo = (container)=>{
   renderTemplate(container,createTripInfoMainTemplate());
