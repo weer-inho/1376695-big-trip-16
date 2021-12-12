@@ -1,95 +1,61 @@
 import dayjs from 'dayjs';
-const offerTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a,b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-const generateCity = () => {
-  const cities = [
-    'Malmo',
-    'Sidney',
-    'Erevan',
-    'Minsk',
-    'London',
-    'Copenghagen',
-    'Montreal',
-    'Oslo',
-    'Krarov'
-  ];
-
-  const randomIndex = getRandomInteger(0, cities.length - 1);
-  return cities[randomIndex];
-};
+import {offerTypes, offer, cities, descriptions, getRandomInteger} from './data.js';
 
 const generateDestination = () => {
-  const destinations = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    'Cras aliquet varius magna, non porta ligula feugiat eget',
-    'Fusce tristique felis at fermentum pharetra',
-    'Aliquam id orci ut lectus varius viverra',
-    'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante',
-    'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum',
-    'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui-in',
-  ];
-
-  const randomIndex = getRandomInteger(0, destinations.length - 1);
-  return {
-    description: destinations[randomIndex],
-    name: generateCity(),
-    pictures: [
-      {
-        src: `http://picsum.photos/248/152?r=${getRandomInteger(0, 100)}`,
-        description: destinations[randomIndex],
-      }
-    ]
-  };
-};
-
-const generateOffer = () => (
-  {
-    type: offerTypes[getRandomInteger(0, offerTypes.length)],
-    offers: [
-      {
-        id: getRandomInteger(0, 10),
-        title: 'Upgrade to a business class',
-        price: 120
-      }, {
-        id: getRandomInteger(0, 10),
-        title: 'Choose the radio station',
-        price: 60
-      }
-    ]
+  let description = '';
+  const randomValue = getRandomInteger(1, 5);
+  for (let i = 0; i < randomValue; i++) {
+    const randomIndex = getRandomInteger(0, descriptions.length - 1);
+    description = description + descriptions[randomIndex];
   }
-);
-
-const generateDate = () => {
-  const maxDaysGap = 365;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
-
-  return dayjs().add(daysGap, 'day').toDate();
+  return description;
 };
 
-const generatePoint = () => {
-  const offer = generateOffer();
-  const destination = generateDestination();
+const generateTypePoint = () => {
+  const randomIndex = getRandomInteger(0, offerTypes.length - 1);
+
+  return offerTypes[randomIndex];
+};
+
+const generatePhoto = () => {
+  const photos = [];
+  for (let i = 0; i < getRandomInteger(1,10); i++) {
+    photos.push(`http://picsum.photos/248/152?r=${Math.floor(Math.random()*100)}`);
+  }
+  return photos;
+};
+
+export const formatTime = (time) => (String(time).length === 1) ? `0${time}` : time;
+
+export const getDuration = (startDate, endDate) => {
+  const days = dayjs(endDate).diff(startDate, 'd');
+  const hours = dayjs(endDate).diff(startDate, 'h') - days*24;
+  const minutes = dayjs(endDate).diff(startDate, 'm') - days*24*60 - hours*60;
+
+  if (days === 0 && hours === 0) {
+    return `${formatTime(minutes)}M`;
+  }
+
+  if (days === 0 ) {
+    return `${formatTime(hours)}H ${formatTime(minutes)}M`;
+  }
+
+  return `${formatTime(days)}D ${formatTime(hours)}H ${formatTime(minutes)}M`;
+};
+
+export const generateTrip = () => {
+  const typePoint= generateTypePoint();
 
   return {
-    basePrice: getRandomInteger(500, 15000),
-    dateFrom: generateDate(),
-    dateTo: generateDate(),
-    destination,
-    id: '0',
-    isFavorite: Boolean(getRandomInteger()),
-    offer,
-    type: offerTypes[getRandomInteger(0, offerTypes.length)],
+    typePoint,
+    destinationCity: cities[getRandomInteger(0, cities.length - 1)],
+    offers: offer[typePoint],
+    destination: generateDestination(),
+    photos: generatePhoto(),
+    price: getRandomInteger(1, 10000),
+    startDate: dayjs().add(- Math.floor(Math.random()*10000), 'minute').toDate(),
+    endDate: dayjs().add(Math.floor(Math.random()*1000), 'minute').toDate(),
+    isFavorite: Boolean(getRandomInteger(0,1)),
   };
 };
 
-export const generateTrip = () => ({
-  point: generatePoint(),
-  city: generateCity(),
-});
