@@ -9,10 +9,16 @@ import { createNavigationTemplate } from './view/menu-navigation.js';
 import { createTripCostTemplate } from './view/trip-info-cost.js';
 import { createTripInfoMainTemplate } from './view/trip-info-main.js';
 import { createPageMainTemplae } from './view/page-main.js';
+import {generateTrip} from './mock/trip.js';
+
+const TRIP_COUNT = 15;
+
+const trips = Array.from({length: TRIP_COUNT}, generateTrip);
+const tripCost = trips.reduce((accumulator, trip) => accumulator + trip.price, 0);
 
 const renderTripInfo = (container)=>{
-  renderTemplate(container,createTripInfoMainTemplate());
-  renderTemplate(container,createTripCostTemplate());
+  renderTemplate(container,createTripInfoMainTemplate(trips));
+  renderTemplate(container,createTripCostTemplate(tripCost));
 };
 
 const renderTripNavigation = (container)=>{
@@ -29,10 +35,11 @@ const renderPageHeader = (body) => {
 };
 
 const renderTripItems = (container)=>{
-  renderTemplate(container,createTripEventsListItemEditTemplate());
-  Array.from({length:3}).forEach(()=>{
-    renderTemplate(container, createTripEventsListItemTemplate());
-  });
+  renderTemplate(container,createTripEventsListItemEditTemplate(trips[0]));
+
+  for (let i = 1; i < TRIP_COUNT; i++) {
+    renderTemplate(container, createTripEventsListItemTemplate(trips[i]));
+  }
 };
 
 const renderTripMain = (container)=>{
