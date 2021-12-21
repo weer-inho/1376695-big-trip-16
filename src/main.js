@@ -3,9 +3,9 @@ import { createMainSortTemplate } from './view/main-sort.js';
 import { createTripEventsList } from './view/trip-events-list.js';
 import { createTripEventsListItemEditTemplate } from './view/trip-events-list-item-edit.js';
 import { createTripEventsListItemTemplate } from './view/trip-event-list-item.js';
-import { renderTemplate } from './render.js';
+import { renderTemplate, renderElement } from './render.js';
 import { createPageHeaderTemplate } from './view/page-header.js';
-import { createNavigationTemplate } from './view/menu-navigation.js';
+import MainNavigation from './view/menu-navigation.js';
 import { createTripCostTemplate } from './view/trip-info-cost.js';
 import { createTripInfoMainTemplate } from './view/trip-info-main.js';
 import { createPageMainTemplae } from './view/page-main.js';
@@ -22,7 +22,7 @@ const renderTripInfo = (container)=>{
 };
 
 const renderTripNavigation = (container)=>{
-  renderTemplate(container, createNavigationTemplate());
+  renderElement(container, new MainNavigation().element);
 };
 const renderTripFilter = (container)=>{
   renderTemplate(container, createSiteFiltersTemplate());
