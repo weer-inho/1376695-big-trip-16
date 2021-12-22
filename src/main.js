@@ -20,8 +20,24 @@ const renderTrip = (listElement, trip) => {
   const tripComponent = new TripEventsItem(trip);
   const tripEditComponent = new TripEventsEdit(trip);
 
-  render(listElement, tripComponent.element)
-}
+  const replaceTripToForm = () => {
+    listElement.replaceChild(tripEditComponent.element, tripComponent.element);
+  };
+  
+  const replaceFormToTrip = () => {
+    listElement.replaceChild(tripComponent.element, tripEditComponent.element);
+  };
+
+  tripComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceTripToForm();
+  });
+
+  tripEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceFormToTrip();
+  })
+
+  render(listElement, tripComponent.element);
+};
 
 const renderTripInfo = (container)=>{
   render(container, new InfoMain(trips).element)
@@ -45,7 +61,7 @@ const renderTripItems = (container)=>{
   renderTrip(container, trips[0])
 
   for (let i = 1; i < TRIP_COUNT; i++) {
-    render(container, new TripEventsItem(trips[i]).element)
+    renderTrip(container, trips[i])
   }
 };
 
@@ -66,4 +82,3 @@ const renderPage = (body) => {
 };
 
 renderPage(document.querySelector('.page-body'));
-
