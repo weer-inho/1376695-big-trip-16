@@ -23,7 +23,7 @@ const renderTrip = (listElement, trip) => {
   const replaceTripToForm = () => {
     listElement.replaceChild(tripEditComponent.element, tripComponent.element);
   };
-  
+
   const replaceFormToTrip = () => {
     listElement.replaceChild(tripComponent.element, tripEditComponent.element);
   };
@@ -34,45 +34,45 @@ const renderTrip = (listElement, trip) => {
 
   tripEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceFormToTrip();
-  })
+  });
 
   render(listElement, tripComponent.element);
 };
 
 const renderTripInfo = (container)=>{
-  render(container, new InfoMain(trips).element)
-  render(container, new TripCost(tripCost).element)
+  render(container, new InfoMain(trips).element);
+  render(container, new TripCost(tripCost).element);
 };
 
 const renderTripNavigation = (container)=>{
   render(container, new MainNavigation().element);
 };
 const renderTripFilter = (container)=>{
-  render(container, new SiteFilters().element)
+  render(container, new SiteFilters().element);
 };
 const renderPageHeader = (body) => {
-  render(body, new PageHeader().element)
+  render(body, new PageHeader().element);
   renderTripInfo(body.querySelector('.trip-main__trip-info'));
   renderTripNavigation(body.querySelector('.trip-controls__navigation'));
   renderTripFilter(body.querySelector('.trip-controls__filters'));
 };
 
 const renderTripItems = (container)=>{
-  renderTrip(container, trips[0])
+  renderTrip(container, trips[0]);
 
   for (let i = 1; i < TRIP_COUNT; i++) {
-    renderTrip(container, trips[i])
+    renderTrip(container, trips[i]);
   }
 };
 
 const renderTripMain = (container)=>{
-  render(container, new MainSort().element)
+  render(container, new MainSort().element);
   render(container, new TripList().element);
   renderTripItems(container.querySelector('.trip-events__list'));
 };
 
 const renderPageMain = (body)=>{
-  render(body, new PageMain().element)
+  render(body, new PageMain().element);
   renderTripMain(body.querySelector('.trip-events'));
 };
 
