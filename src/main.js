@@ -39,15 +39,15 @@ const renderTrip = (listElement, trip) => {
   render(listElement, tripComponent.element);
 };
 
-const renderTripInfo = (container)=>{
+const renderTripInfo = (container) => {
   render(container, new InfoMain(trips).element);
   render(container, new TripCost(tripCost).element);
 };
 
-const renderTripNavigation = (container)=>{
+const renderTripNavigation = (container) => {
   render(container, new MainNavigation().element);
 };
-const renderTripFilter = (container)=>{
+const renderTripFilter = (container) => {
   render(container, new SiteFilters().element);
 };
 const renderPageHeader = (body) => {
@@ -57,7 +57,7 @@ const renderPageHeader = (body) => {
   renderTripFilter(body.querySelector('.trip-controls__filters'));
 };
 
-const renderTripItems = (container)=>{
+const renderTripItems = (container) => {
   renderTrip(container, trips[0]);
 
   for (let i = 1; i < TRIP_COUNT; i++) {
