@@ -1,3 +1,4 @@
+import {createElement} from '../render.js';
 import dayjs from 'dayjs';
 
 const createEventOffers = (offers) => (`<section class="event__section  event__section--offers">
@@ -20,7 +21,7 @@ const createEventPhotos = (photos) => (`
 ${photos.map((photo) => `<img class="event__photo" src="${photo}" alt="Event photo">`)}
 `);
 
-export const createTripEventsListItemEditTemplate = (trip) => {
+const createListItemEditTemplate = (trip) => {
   const {destinationCity, typePoint, offers, startDate, endDate, destination, price, photos} = trip;
 
   return `<li class="trip-events__item">
@@ -139,3 +140,28 @@ export const createTripEventsListItemEditTemplate = (trip) => {
     </form>
     </li>`;
 };
+
+export default class TripEventsEdit {
+  #element = null;
+  #trip = null;
+
+  constructor(trip) {
+    this.#trip = trip;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createListItemEditTemplate(this.#trip);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

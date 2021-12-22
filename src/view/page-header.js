@@ -1,4 +1,6 @@
-export const createPageHeaderTemplate = ()=>(`<header class="page-header">
+import {createElement} from '../render.js';
+
+const createPageHeaderTemplate = ()=>(`<header class="page-header">
 <div class="page-body__container  page-header__container">
   <img class="page-header__logo" src="img/logo.png" width="42" height="42" alt="Trip logo">
 
@@ -20,3 +22,23 @@ export const createPageHeaderTemplate = ()=>(`<header class="page-header">
 </div>
 </header>
 `);
+
+export default class PageHeader {
+  #element = null;
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createPageHeaderTemplate();
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

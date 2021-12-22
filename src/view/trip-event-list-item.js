@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
+import {createElement} from '../render.js';
 import {getDuration} from '../mock/trip.js';
 
-export const createTripEventsListItemTemplate = (trip = {}) => {
+const createListItemTemplate = (trip = {}) => {
   const {destinationCity, typePoint, offers, startDate, endDate, isFavorite, price} = trip;
 
   return `<li class="trip-events__item">
@@ -42,3 +43,28 @@ export const createTripEventsListItemTemplate = (trip = {}) => {
     </div>
   </li>`;
 };
+
+export default class TripEventsItem {
+  #element = null;
+  #trip = null;
+
+  constructor(trip) {
+    this.#trip = trip;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createListItemTemplate(this.#trip);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
