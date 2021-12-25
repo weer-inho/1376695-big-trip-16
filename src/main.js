@@ -12,7 +12,7 @@ import PageMain from './view/page-main.js';
 import NoData from './view/no-data.js';
 import {generateTrip} from './mock/trip.js';
 
-const TRIP_COUNT = 0;
+const TRIP_COUNT = 3;
 
 const trips = Array.from({length: TRIP_COUNT}, generateTrip);
 const tripCost = trips.reduce((accumulator, trip) => accumulator + trip.price, 0);
@@ -92,14 +92,13 @@ const renderPage = (body) => {
   renderPageMain(body);
 };
 
-if (trips.length === 0) {
-  const body = document.querySelector('.page-body');
-  render(body, new PageHeader().element);
-  renderTripNavigation(body.querySelector('.trip-controls__navigation'));
-  renderTripFilter(body.querySelector('.trip-controls__filters'));
-  render(body, new NoData().element);
-} else {
-  renderPage(document.querySelector('.page-body'));
-}
+const renderApplication = (body) => {
+  if (trips.length === 0) {
+    renderPageHeader(body);
+    render(body, new NoData().element);
+  } else {
+    renderPage(body);
+  }
+};
 
-
+renderApplication(document.querySelector('.page-body'));
