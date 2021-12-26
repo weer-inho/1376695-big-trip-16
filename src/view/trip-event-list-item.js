@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 import {getDuration} from '../mock/trip.js';
 
 const createListItemTemplate = (trip = {}) => {
@@ -44,27 +44,15 @@ const createListItemTemplate = (trip = {}) => {
   </li>`;
 };
 
-export default class TripEventsItem {
-  #element = null;
+export default class TripEventsItem extends AbstractView {
   #trip = null;
 
   constructor(trip) {
+    super();
     this.#trip = trip;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createListItemTemplate(this.#trip);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

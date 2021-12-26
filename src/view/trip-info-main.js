@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 
 const createTripInfoMainTemplate = (trips = []) => {
   if (trips.length === 0) {
@@ -12,27 +12,15 @@ const createTripInfoMainTemplate = (trips = []) => {
 </div>`;
 };
 
-export default class InfoMain {
-  #element = null;
+export default class InfoMain extends AbstractView {
   #trips = null;
 
   constructor(trips) {
+    super();
     this.#trips = trips;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createTripInfoMainTemplate(this.#trips);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
