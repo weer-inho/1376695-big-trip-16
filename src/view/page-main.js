@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 
 const createPageMainTemplate = ()=>(`<main class="page-body__page-main  page-main">
 <div class="page-body__container">
@@ -9,22 +9,8 @@ const createPageMainTemplate = ()=>(`<main class="page-body__page-main  page-mai
 </div>
 </main>`);
 
-export default class PageMain {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+export default class PageMain extends AbstractView {
   get template() {
     return createPageMainTemplate();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
