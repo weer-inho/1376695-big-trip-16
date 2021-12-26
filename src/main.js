@@ -9,9 +9,10 @@ import MainNavigation from './view/menu-navigation.js';
 import TripCost from './view/trip-info-cost.js';
 import InfoMain from './view/trip-info-main.js';
 import PageMain from './view/page-main.js';
+import NoData from './view/no-data.js';
 import {generateTrip} from './mock/trip.js';
 
-const TRIP_COUNT = 15;
+const TRIP_COUNT = 3;
 
 const trips = Array.from({length: TRIP_COUNT}, generateTrip);
 const tripCost = trips.reduce((accumulator, trip) => accumulator + trip.price, 0);
@@ -28,12 +29,22 @@ const renderTrip = (listElement, trip) => {
     listElement.replaceChild(tripComponent.element, tripEditComponent.element);
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToTrip();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   tripComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceTripToForm();
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   tripEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceFormToTrip();
+    document.removeEventListener('keydown', onEscKeyDown);
   });
 
   render(listElement, tripComponent.element);
@@ -81,4 +92,13 @@ const renderPage = (body) => {
   renderPageMain(body);
 };
 
-renderPage(document.querySelector('.page-body'));
+const renderApplication = (body) => {
+  if (trips.length === 0) {
+    renderPageHeader(body);
+    render(body, new NoData().element);
+  } else {
+    renderPage(body);
+  }
+};
+
+renderApplication(document.querySelector('.page-body'));

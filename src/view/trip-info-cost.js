@@ -1,8 +1,13 @@
 import {createElement} from '../render.js';
 
-const createTripCostTemplate = (cost)=>(`<p class="trip-info__cost">
+const createTripCostTemplate = (cost = 0) => {
+  if (cost === 0) {
+    return '';
+  }
+  return `<p class="trip-info__cost">
 Total: €&nbsp;<span class="trip-info__cost-value">${cost}</span>
-</p>`);
+</p>`;
+};
 
 export default class TripCost {
   #element = null;
