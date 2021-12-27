@@ -1,3 +1,5 @@
+import AbstractView from './view/abstract-view';
+
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
   AFTERBEGIN: 'afterbegin',
@@ -6,20 +8,53 @@ export const RenderPosition = {
 };
 
 export const render = (container, element, place = RenderPosition.BEFOREEND) => {
+  const parent = container instanceof AbstractView ? container.element : container;
+  const child = element instanceof AbstractView ? element.element : element;
+
   switch (place) {
     case RenderPosition.BEFOREBEGIN:
-      container.before(element);
+      parent.before(child);
       break;
     case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
+      parent.prepend(child);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(element);
+      parent.append(child);
       break;
     case RenderPosition.AFTEREND:
-      container.after(element);
+      parent.after(child);
       break;
   }
+};
+
+export const replace = (newElement, oldElement) => {
+  if (newElement === null || oldElement === null) {
+    throw new Error('cant replace unexisting elements');
+  }
+
+  const newChild = newElement instanceof AbstractView ? newElement.element : newElement;
+  const oldChild = oldElement instanceof AbstractView ? oldElement.element : oldElement;
+
+  const parent = oldChild.parentElement;
+
+  if (parent === null) {
+    throw new Error ('parent element does not exist');
+  }
+
+  parent.replaceChild(newChild, oldChild);
+};
+
+export const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
+  if (!(component instanceof AbstractView)) {
+    throw new Error('can remove only components');
+  }
+
+  component.element.remove();
+  component.removeElement();
 };
 
 export const createElement = (template) => {

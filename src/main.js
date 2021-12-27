@@ -3,7 +3,7 @@ import MainSort from './view/main-sort.js';
 import TripList from './view/trip-events-list.js';
 import TripEventsEdit from './view/trip-events-list-item-edit.js';
 import TripEventsItem from './view/trip-event-list-item.js';
-import { render } from './render.js';
+import { render, replace } from './render.js';
 import PageHeader from './view/page-header.js';
 import MainNavigation from './view/menu-navigation.js';
 import TripCost from './view/trip-info-cost.js';
@@ -22,11 +22,11 @@ const renderTrip = (listElement, trip) => {
   const tripEditComponent = new TripEventsEdit(trip);
 
   const replaceTripToForm = () => {
-    listElement.replaceChild(tripEditComponent.element, tripComponent.element);
+    replace(tripEditComponent, tripComponent);
   };
 
   const replaceFormToTrip = () => {
-    listElement.replaceChild(tripComponent.element, tripEditComponent.element);
+    replace(tripComponent, tripEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -47,22 +47,22 @@ const renderTrip = (listElement, trip) => {
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(listElement, tripComponent.element);
+  render(listElement, tripComponent);
 };
 
 const renderTripInfo = (container) => {
-  render(container, new InfoMain(trips).element);
-  render(container, new TripCost(tripCost).element);
+  render(container, new InfoMain(trips));
+  render(container, new TripCost(tripCost));
 };
 
 const renderTripNavigation = (container) => {
-  render(container, new MainNavigation().element);
+  render(container, new MainNavigation());
 };
 const renderTripFilter = (container) => {
-  render(container, new SiteFilters().element);
+  render(container, new SiteFilters());
 };
 const renderPageHeader = (body) => {
-  render(body, new PageHeader().element);
+  render(body, new PageHeader());
   renderTripInfo(body.querySelector('.trip-main__trip-info'));
   renderTripNavigation(body.querySelector('.trip-controls__navigation'));
   renderTripFilter(body.querySelector('.trip-controls__filters'));
@@ -77,13 +77,13 @@ const renderTripItems = (container) => {
 };
 
 const renderTripMain = (container)=>{
-  render(container, new MainSort().element);
-  render(container, new TripList().element);
+  render(container, new MainSort());
+  render(container, new TripList());
   renderTripItems(container.querySelector('.trip-events__list'));
 };
 
 const renderPageMain = (body)=>{
-  render(body, new PageMain().element);
+  render(body, new PageMain());
   renderTripMain(body.querySelector('.trip-events'));
 };
 
@@ -95,7 +95,7 @@ const renderPage = (body) => {
 const renderApplication = (body) => {
   if (trips.length === 0) {
     renderPageHeader(body);
-    render(body, new NoData().element);
+    render(body, new NoData());
   } else {
     renderPage(body);
   }
