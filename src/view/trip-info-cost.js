@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 
 const createTripCostTemplate = (cost = 0) => {
   if (cost === 0) {
@@ -9,27 +9,15 @@ Total: €&nbsp;<span class="trip-info__cost-value">${cost}</span>
 </p>`;
 };
 
-export default class TripCost {
-  #element = null;
+export default class TripCost extends AbstractView {
   #cost = null;
 
   constructor(cost) {
+    super();
     this.#cost = cost;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createTripCostTemplate(this.#cost);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

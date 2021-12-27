@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 import dayjs from 'dayjs';
 
 const createEventOffers = (offers) => (`<section class="event__section  event__section--offers">
@@ -141,27 +141,25 @@ const createListItemEditTemplate = (trip) => {
     </li>`;
 };
 
-export default class TripEventsEdit {
-  #element = null;
+export default class TripEventsEdit extends AbstractView {
   #trip = null;
 
   constructor(trip) {
+    super();
     this.#trip = trip;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createListItemEditTemplate(this.#trip);
   }
 
-  removeElement() {
-    this.#element = null;
+  setListItemEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#listItemEditClickHandler);
+  }
+
+  #listItemEditClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 }
