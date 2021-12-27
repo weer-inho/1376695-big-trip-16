@@ -37,12 +37,12 @@ const renderTrip = (listElement, trip) => {
     }
   };
 
-  tripComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  tripComponent.setListItemClickHandler(() => {
     replaceTripToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  tripEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  tripEditComponent.setListItemEditClickHandler(() => {
     replaceFormToTrip();
     document.removeEventListener('keydown', onEscKeyDown);
   });

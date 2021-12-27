@@ -152,4 +152,14 @@ export default class TripEventsEdit extends AbstractView {
   get template() {
     return createListItemEditTemplate(this.#trip);
   }
+
+  setListItemEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#listItemEditClickHandler);
+  }
+
+  #listItemEditClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
 }
