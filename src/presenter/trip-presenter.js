@@ -9,9 +9,11 @@ export default class TripPresenter {
   #tripEditComponent = null;
 
   #trip = null;
+  #changeData = null;
 
-  constructor(tripListContainer) {
+  constructor(tripListContainer, changeData) {
     this.#tripListContainer = tripListContainer;
+    this.#changeData = changeData;
   }
 
   init = (trip) => {
@@ -24,7 +26,7 @@ export default class TripPresenter {
     this.#tripEditComponent = new TripEventsEdit(trip);
 
     this.#tripComponent.setListItemClickHandler(this.#handleFormSubmit);
-
+    this.#tripComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#tripEditComponent.setListItemEditClickHandler(this.#handleEditClick);
 
     if (prevTripComponent === null || prevTripEditComponent === null) {
@@ -32,11 +34,11 @@ export default class TripPresenter {
       return;
     }
 
-    if (this.#tripListContainer.element.contains(prevTripComponent.element)) {
+    if (this.#tripListContainer.contains(prevTripComponent.element)) {
       replace(this.#tripComponent, prevTripComponent);
     }
 
-    if (this.#tripListContainer.element.contains(prevTripEditComponent.element)) {
+    if (this.#tripListContainer.contains(prevTripEditComponent.element)) {
       replace(this.#tripEditComponent, prevTripEditComponent);
     }
 
@@ -69,7 +71,12 @@ export default class TripPresenter {
     this.#replaceTripToForm();
   }
 
-  #handleFormSubmit = () => {
+  #handleFormSubmit = (trip) => {
+    this.#changeData(trip);
     this.#replaceFormToTrip();
+  }
+
+  #handleFavoriteClick = () => {
+    this.#changeData({...this.#trip, isFavorite: !this.#trip.isFavorite});
   }
 }
