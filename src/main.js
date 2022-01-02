@@ -50,22 +50,22 @@ const renderTrip = (listElement, trip) => {
   render(listElement, tripComponent);
 };
 
-const renderTripInfo = (container) => {
+const renderInfo = (container) => {
   render(container, new InfoMain(trips));
   render(container, new TripCost(tripCost));
 };
 
-const renderTripNavigation = (container) => {
+const renderNavigation = (container) => {
   render(container, new MainNavigation());
 };
-const renderTripFilter = (container) => {
+const renderFilter = (container) => {
   render(container, new SiteFilters());
 };
 const renderPageHeader = (body) => {
   render(body, new PageHeader());
-  renderTripInfo(body.querySelector('.trip-main__trip-info'));
-  renderTripNavigation(body.querySelector('.trip-controls__navigation'));
-  renderTripFilter(body.querySelector('.trip-controls__filters'));
+  renderInfo(body.querySelector('.trip-main__trip-info'));
+  renderNavigation(body.querySelector('.trip-controls__navigation'));
+  renderFilter(body.querySelector('.trip-controls__filters'));
 };
 
 const renderTripItems = (container) => {
