@@ -1,116 +1,75 @@
-import SiteFilters from '../view/site-menu-filters.js';
-import MainSort from '../view/main-sort.js';
-import TripList from '../view/trip-events-list.js';
 import TripEventsEdit from '../view/trip-events-list-item-edit.js';
 import TripEventsItem from '../view/trip-event-list-item.js';
-import { render, replace } from '../render.js';
-import PageHeader from '../view/page-header.js';
-import MainNavigation from '../view/menu-navigation.js';
-import TripCost from '../view/trip-info-cost.js';
-import InfoMain from '../view/trip-info-main.js';
-import PageMain from '../view/page-main.js';
-import NoData from '../view/no-data.js';
+import { render, replace, remove } from '../render.js';
 
 export default class TripPresenter {
-  #tripContainer = null;
+  #tripListContainer = null;
 
-  #HeaderComponent = new PageHeader();
-  #MainComponent = new PageMain();
-  #sortComponent = new MainSort();
-  #noTripsComponent = new NoData();
+  #tripComponent = null;
+  #tripEditComponent = null;
 
-  #trips = [];
+  #trip = null;
 
-  constructor(tripContainer) {
-    this.#tripContainer = tripContainer;
+  constructor(tripListContainer) {
+    this.#tripListContainer = tripListContainer;
   }
 
-  init = (trips) => {
-    this.#trips = [...trips];
+  init = (trip) => {
+    this.#trip = trip;
 
-    this.#renderBoard(this.#tripContainer);
-  }
+    const prevTripComponent = this.#tripComponent;
+    const prevTripEditComponent = this.#tripEditComponent;
 
-  #renderTrip = (listElement, trip) => {
-    const tripComponent = new TripEventsItem(trip);
-    const tripEditComponent = new TripEventsEdit(trip);
+    this.#tripComponent = new TripEventsItem(trip);
+    this.#tripEditComponent = new TripEventsEdit(trip);
 
-    const replaceTripToForm = () => {
-      replace(tripEditComponent, tripComponent);
-    };
+    this.#tripComponent.setListItemClickHandler(this.#handleFormSubmit);
 
-    const replaceFormToTrip = () => {
-      replace(tripComponent, tripEditComponent);
-    };
+    this.#tripEditComponent.setListItemEditClickHandler(this.#handleEditClick);
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToTrip();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    tripComponent.setListItemClickHandler(() => {
-      replaceTripToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    tripEditComponent.setListItemEditClickHandler(() => {
-      replaceFormToTrip();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    render(listElement, tripComponent);
-  }
-
-  #renderInfo = (container) => {
-    render(container, new InfoMain(this.#trips));
-    const tripCost = this.#trips.reduce((accumulator, trip) => accumulator + trip.price, 0);
-    render(container, new TripCost(tripCost));
-  }
-
-  #renderNavigation = (container) => {
-    render(container, new MainNavigation());
-  }
-
-  #renderFilter = (container) => {
-    render(container, new SiteFilters());
-  }
-
-  #renderPageHeader = (body) => {
-    render(body, new PageHeader());
-    this.#renderInfo(body.querySelector('.trip-main__trip-info'));
-    this.#renderNavigation(body.querySelector('.trip-controls__navigation'));
-    this.#renderFilter(body.querySelector('.trip-controls__filters'));
-  }
-
-  #renderTripItems = (container) => {
-    this.#trips.forEach((trip) => this.#renderTrip(container, trip));
-  }
-
-  #renderMain = (container) => {
-    render(container, new MainSort());
-    render(container, new TripList());
-    this.#renderTripItems(container.querySelector('.trip-events__list'));
-  }
-
-  #renderPageMain = (body) => {
-    render(body, new PageMain());
-    this.#renderMain(body.querySelector('.trip-events'));
-  }
-
-  #renderPage = (body) => {
-    this.#renderPageHeader(body);
-    this.#renderPageMain(body);
-  }
-
-  #renderBoard = (body) => {
-    if (this.#trips.length === 0) {
-      this.#renderPageHeader(body);
-      render(body, new NoData());
-    } else {
-      this.#renderPage(body);
+    if (prevTripComponent === null || prevTripEditComponent === null) {
+      render(this.#tripListContainer, this.#tripComponent);
+      return;
     }
+
+    if (this.#tripListContainer.element.contains(prevTripComponent.element)) {
+      replace(this.#tripComponent, prevTripComponent);
+    }
+
+    if (this.#tripListContainer.element.contains(prevTripEditComponent.element)) {
+      replace(this.#tripEditComponent, prevTripEditComponent);
+    }
+
+    remove(prevTripComponent);
+    remove(prevTripEditComponent);
+  }
+
+  destroy = () => {
+    remove(this.#tripComponent);
+    remove(this.#tripEditComponent);
+  }
+
+  #replaceTripToForm = () => {
+    replace(this.#tripComponent, this.#tripEditComponent);
+  };
+
+  #replaceFormToTrip = () => {
+    replace(this.#tripEditComponent, this.#tripComponent);
+  };
+
+  #onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this.#replaceFormToTrip();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+    }
+  };
+
+  #handleEditClick = () => {
+    this.#replaceTripToForm();
+  }
+
+  #handleFormSubmit = () => {
+    this.#replaceFormToTrip();
   }
 }
