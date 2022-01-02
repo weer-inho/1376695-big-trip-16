@@ -27,42 +27,90 @@ export default class TripPresenter {
 
   init = (trips) => {
     this.#trips = [...trips];
-    // метод для начала работы модуля
+
+    this.#renderBoard(this.#tripContainer);
   }
 
-  #renderTrip = () => {
-    // метод отрисовки одной карточки(поездки)
+  #renderTrip = (listElement, trip) => {
+    const tripComponent = new TripEventsItem(trip);
+    const tripEditComponent = new TripEventsEdit(trip);
+
+    const replaceTripToForm = () => {
+      replace(tripEditComponent, tripComponent);
+    };
+
+    const replaceFormToTrip = () => {
+      replace(tripComponent, tripEditComponent);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceFormToTrip();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    tripComponent.setListItemClickHandler(() => {
+      replaceTripToForm();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    tripEditComponent.setListItemEditClickHandler(() => {
+      replaceFormToTrip();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    render(listElement, tripComponent);
   }
 
-  #renderInfo = () => {
-    // метод отрисовки блока trip-info
+  #renderInfo = (container) => {
+    render(container, new InfoMain(this.#trips));
+    const tripCost = this.#trips.reduce((accumulator, trip) => accumulator + trip.price, 0);
+    render(container, new TripCost(tripCost));
   }
 
-  #renderNavigation = () => {
-    // метод отрисовки блока trip-controls__navigation
+  #renderNavigation = (container) => {
+    render(container, new MainNavigation());
   }
 
-  #renderFilter = () => {
-    // метод отрисовки блока trip-controls__filters
+  #renderFilter = (container) => {
+    render(container, new SiteFilters());
   }
 
-  #renderPageHeader = () => {
-    // метод отрисовки блоков newPageHeader+info+navigation+filter
+  #renderPageHeader = (body) => {
+    render(body, new PageHeader());
+    this.#renderInfo(body.querySelector('.trip-main__trip-info'));
+    this.#renderNavigation(body.querySelector('.trip-controls__navigation'));
+    this.#renderFilter(body.querySelector('.trip-controls__filters'));
   }
 
-  #renderTripItems = () => {
-    // метод отрисовки всех поездок
-  }
-  
-  #renderMain = () => {
-    // метод отрисовки блоков сортировки, контейнера-списка ul, renderTripItems
+  #renderTripItems = (container) => {
+    this.#trips.forEach((trip) => this.#renderTrip(container, trip));
   }
 
-  #renderPageMain = () => {
-    // метод отрисовки блоков newPageMain+renderMain
+  #renderMain = (container) => {
+    render(container, new MainSort());
+    render(container, new TripList());
+    this.#renderTripItems(container.querySelector('.trip-events__list'));
   }
 
-  #renderPage = () => {
-    // метод отрисовки блоков pageHeader+pageMain
+  #renderPageMain = (body) => {
+    render(body, new PageMain());
+    this.#renderMain(body.querySelector('.trip-events'));
+  }
+
+  #renderPage = (body) => {
+    this.#renderPageHeader(body);
+    this.#renderPageMain(body);
+  }
+
+  #renderBoard = (body) => {
+    if (this.#trips.length === 0) {
+      this.#renderPageHeader(body);
+      render(body, new NoData());
+    } else {
+      this.#renderPage(body);
+    }
   }
 }
