@@ -43,11 +43,11 @@ export default class TripPresenter {
       return;
     }
 
-    if (this.#tripListContainer.contains(prevTripComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#tripComponent, prevTripComponent);
     }
 
-    if (this.#tripListContainer.contains(prevTripEditComponent.element)) {
+    if (this.#mode === Mode.EDITING) {
       replace(this.#tripEditComponent, prevTripEditComponent);
     }
 
@@ -69,14 +69,14 @@ export default class TripPresenter {
   #replaceTripToForm = () => {
     // заменяю на форму, убираю обычный
     replace(this.#tripEditComponent, this.#tripComponent);
-    console.log('tripToForm')
-    
+    this.#changeMode();
+    this.#mode = Mode.EDITING;
   };
 
   #replaceFormToTrip = () => {
     // заменяю на обычный, убираю форму
     replace(this.#tripComponent, this.#tripEditComponent);
-    console.log('formToTrip')
+    this.#mode = Mode.DEFAULT;
   };
 
   #onEscKeyDown = (evt) => {
