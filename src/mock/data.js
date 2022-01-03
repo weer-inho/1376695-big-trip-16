@@ -150,3 +150,9 @@ export const descriptions = [
   'Aliquam erat volutpat. ',
   'Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus. ',
 ];
+
+export const SortType = {
+  DEFAULT: 'default',
+  PRICE: 'price',
+  TIME: 'time',
+};
