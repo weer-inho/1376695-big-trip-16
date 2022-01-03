@@ -2,6 +2,11 @@ import TripEventsEdit from '../view/trip-events-list-item-edit.js';
 import TripEventsItem from '../view/trip-event-list-item.js';
 import { render, replace, remove } from '../render.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export default class TripPresenter {
   #tripListContainer = null;
 
@@ -9,12 +14,15 @@ export default class TripPresenter {
   #tripEditComponent = null;
   #tripPresenter = new Map();
   #changeData = null;
+  #changeMode = null;
 
   #trip = null;
+  #mode = Mode.DEFAULT
 
-  constructor(tripListContainer, changeData) {
+  constructor(tripListContainer, changeData, changeMode) {
     this.#tripListContainer = tripListContainer;
     this.#changeData = changeData;
+    this.#changeMode = changeMode;
   }
 
   init = (trip) => {
