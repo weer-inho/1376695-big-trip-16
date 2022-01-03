@@ -8,8 +8,7 @@ import InfoMain from '../view/trip-info-main.js';
 import PageMain from '../view/page-main.js';
 import NoData from '../view/no-data.js';
 import TripPresenter from './trip-presenter.js';
-import { updateItem } from '../utils.js';
-import { remove, render } from '../render.js';
+import { render, updateItem } from '../render.js';
 
 export default class BoardPresenter {
   #tripContainer = null;
@@ -33,18 +32,23 @@ export default class BoardPresenter {
     this.#renderBoard(this.#tripContainer);
   }
 
+  #handleModeChange = () => {
+    this.#tripPresenter.forEach((presenter) => presenter.resetView());
+  }
+
   #handleTripChange = (updatedTrip) => {
     this.#trips = updateItem(this.#trips, updatedTrip);
     this.#tripPresenter.get(updatedTrip.id).init(updatedTrip);
   }
 
-  #clearTripList = () => {
+
+  #clearTaskList = () => {
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
   }
 
   #renderTrip = (listElement, trip) => {
-    const tripPresenter = new TripPresenter(listElement, this.#handleTripChange);
+    const tripPresenter = new TripPresenter(listElement, this.#handleTripChange, this.#handleModeChange);
     tripPresenter.init(trip);
     this.#tripPresenter.set(trip.id, tripPresenter);
   }

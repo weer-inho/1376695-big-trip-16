@@ -2,18 +2,27 @@ import TripEventsEdit from '../view/trip-events-list-item-edit.js';
 import TripEventsItem from '../view/trip-event-list-item.js';
 import { render, replace, remove } from '../render.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export default class TripPresenter {
   #tripListContainer = null;
 
   #tripComponent = null;
   #tripEditComponent = null;
+  #tripPresenter = new Map();
+  #changeData = null;
+  #changeMode = null;
 
   #trip = null;
-  #changeData = null;
+  #mode = Mode.DEFAULT
 
-  constructor(tripListContainer, changeData) {
+  constructor(tripListContainer, changeData, changeMode) {
     this.#tripListContainer = tripListContainer;
     this.#changeData = changeData;
+    this.#changeMode = changeMode;
   }
 
   init = (trip) => {
@@ -26,24 +35,30 @@ export default class TripPresenter {
     this.#tripEditComponent = new TripEventsEdit(trip);
 
     this.#tripComponent.setListItemClickHandler(this.#handleFormSubmit);
-    this.#tripComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#tripEditComponent.setListItemEditClickHandler(this.#handleEditClick);
+    this.#tripComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
     if (prevTripComponent === null || prevTripEditComponent === null) {
       render(this.#tripListContainer, this.#tripComponent);
       return;
     }
 
-    if (this.#tripListContainer.contains(prevTripComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#tripComponent, prevTripComponent);
     }
 
-    if (this.#tripListContainer.contains(prevTripEditComponent.element)) {
+    if (this.#mode === Mode.EDITING) {
       replace(this.#tripEditComponent, prevTripEditComponent);
     }
 
     remove(prevTripComponent);
     remove(prevTripEditComponent);
+  }
+
+  resetView = () => {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToTrip();
+    }
   }
 
   destroy = () => {
@@ -52,11 +67,16 @@ export default class TripPresenter {
   }
 
   #replaceTripToForm = () => {
-    replace(this.#tripComponent, this.#tripEditComponent);
+    // заменяю на форму, убираю обычный
+    replace(this.#tripEditComponent, this.#tripComponent);
+    this.#changeMode();
+    this.#mode = Mode.EDITING;
   };
 
   #replaceFormToTrip = () => {
-    replace(this.#tripEditComponent, this.#tripComponent);
+    // заменяю на обычный, убираю форму
+    replace(this.#tripComponent, this.#tripEditComponent);
+    this.#mode = Mode.DEFAULT;
   };
 
   #onEscKeyDown = (evt) => {
@@ -68,15 +88,14 @@ export default class TripPresenter {
   };
 
   #handleEditClick = () => {
-    this.#replaceTripToForm();
-  }
-
-  #handleFormSubmit = (trip) => {
-    this.#changeData(trip);
     this.#replaceFormToTrip();
   }
 
   #handleFavoriteClick = () => {
     this.#changeData({...this.#trip, isFavorite: !this.#trip.isFavorite});
+  }
+
+  #handleFormSubmit = () => {
+    this.#replaceTripToForm();
   }
 }
