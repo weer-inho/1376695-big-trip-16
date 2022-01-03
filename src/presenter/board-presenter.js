@@ -32,6 +32,12 @@ export default class BoardPresenter {
     this.#renderBoard(this.#tripContainer);
   }
 
+  #handleSortTypeChange = (sortType) => {
+    // - Сортируем задачи
+    // - Очищаем список
+    // - Рендерим список заново
+  }
+
   #handleModeChange = () => {
     this.#tripPresenter.forEach((presenter) => presenter.resetView());
   }
@@ -78,8 +84,13 @@ export default class BoardPresenter {
     this.#trips.forEach((trip) => this.#renderTrip(container, trip));
   }
 
-  #renderMain = (container) => {
+  #renderSort = (container) => {
     render(container, this.#sortComponent);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+  }
+
+  #renderMain = (container) => {
+    this.#renderSort(container);
     render(container, this.#TripList);
     this.#renderTripItems(container.querySelector('.trip-events__list'));
   }
