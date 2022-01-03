@@ -55,17 +55,28 @@ export default class TripPresenter {
     remove(prevTripEditComponent);
   }
 
+  resetView = () => {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToTrip();
+    }
+  }
+
   destroy = () => {
     remove(this.#tripComponent);
     remove(this.#tripEditComponent);
   }
 
   #replaceTripToForm = () => {
-    replace(this.#tripComponent, this.#tripEditComponent);
+    // заменяю на форму, убираю обычный
+    replace(this.#tripEditComponent, this.#tripComponent);
+    console.log('tripToForm')
+    
   };
 
   #replaceFormToTrip = () => {
-    replace(this.#tripEditComponent, this.#tripComponent);
+    // заменяю на обычный, убираю форму
+    replace(this.#tripComponent, this.#tripEditComponent);
+    console.log('formToTrip')
   };
 
   #onEscKeyDown = (evt) => {
@@ -77,7 +88,7 @@ export default class TripPresenter {
   };
 
   #handleEditClick = () => {
-    this.#replaceTripToForm();
+    this.#replaceFormToTrip();
   }
 
   #handleFavoriteClick = () => {
@@ -85,6 +96,6 @@ export default class TripPresenter {
   }
 
   #handleFormSubmit = () => {
-    this.#replaceFormToTrip();
+    this.#replaceTripToForm();
   }
 }
