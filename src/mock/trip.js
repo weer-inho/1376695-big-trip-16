@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {offerTypes, offer, cities, descriptions, getRandomInteger} from './data.js';
 
 const generateDestination = () => {
@@ -47,6 +48,7 @@ export const generateTrip = () => {
   const typePoint= generateTypePoint();
 
   return {
+    id: nanoid(),
     typePoint,
     destinationCity: cities[getRandomInteger(0, cities.length - 1)],
     offers: offer[typePoint],
