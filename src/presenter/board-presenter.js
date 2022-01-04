@@ -9,6 +9,7 @@ import PageMain from '../view/page-main.js';
 import NoData from '../view/no-data.js';
 import TripPresenter from './trip-presenter.js';
 import { render, updateItem } from '../render.js';
+import { SortType, sortPrice, sortTime } from '../mock/data.js';
 
 export default class BoardPresenter {
   #tripContainer = null;
@@ -21,6 +22,8 @@ export default class BoardPresenter {
 
   #trips = [];
   #tripPresenter = new Map();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedBoardTrips = [];
 
   constructor(tripContainer) {
     this.#tripContainer = tripContainer;
@@ -28,14 +31,20 @@ export default class BoardPresenter {
 
   init = (trips) => {
     this.#trips = [...trips];
+    this.#sourcedBoardTrips = [...trips];
 
     this.#renderBoard(this.#tripContainer);
   }
 
   #handleSortTypeChange = (sortType) => {
-    // - Сортируем задачи
-    // - Очищаем список
-    // - Рендерим список заново
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortTrips(sortType);
+    this.#clearTripList();
+    this.#renderTripItems(document.querySelector('.trip-events__list'));
+    this.#currentSortType = sortType;
   }
 
   #handleModeChange = () => {
@@ -44,11 +53,26 @@ export default class BoardPresenter {
 
   #handleTripChange = (updatedTrip) => {
     this.#trips = updateItem(this.#trips, updatedTrip);
+
     this.#tripPresenter.get(updatedTrip.id).init(updatedTrip);
   }
 
+  #sortTrips = (sortType) => {
+    switch (sortType) {
+      case SortType.PRICE:
+        this.#trips.sort(sortPrice);
+        break;
+      case SortType.TIME:
+        this.#trips.sort(sortTime);
+        break;
+      case SortType.DEFAULT:
+        this.#trips = [...this.#sourcedBoardTrips];
+        break;
+      default:
+    }
+  }
 
-  #clearTaskList = () => {
+  #clearTripList = () => {
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
   }
