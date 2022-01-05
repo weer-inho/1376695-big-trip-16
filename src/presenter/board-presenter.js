@@ -33,7 +33,7 @@ export default class BoardPresenter {
     this.#trips = [...trips];
     this.#sourcedBoardTrips = [...trips];
 
-    this.#renderBoard(this.#tripContainer);
+    this.#renderBoard();
   }
 
   #handleSortTypeChange = (sortType) => {
@@ -77,35 +77,37 @@ export default class BoardPresenter {
     this.#tripPresenter.clear();
   }
 
-  #renderTrip = (listElement, trip) => {
+  #renderTrip = (trip) => {
+    const listElement = this.#tripContainer.querySelector('.trip-events__list');
     const tripPresenter = new TripPresenter(listElement, this.#handleTripChange, this.#handleModeChange);
     tripPresenter.init(trip);
     this.#tripPresenter.set(trip.id, tripPresenter);
   }
 
-  #renderInfo = (container) => {
+  #renderInfo = () => {
+    const container = this.#tripContainer.querySelector('.trip-main__trip-info');
     render(container, new InfoMain(this.#trips));
     const tripCost = this.#trips.reduce((accumulator, trip) => accumulator + trip.price, 0);
     render(container, new TripCost(tripCost));
   }
 
-  #renderNavigation = (container) => {
-    render(container, new MainNavigation());
+  #renderNavigation = () => {
+    render(this.#tripContainer.querySelector('.trip-controls__navigation'), new MainNavigation());
   }
 
-  #renderFilter = (container) => {
-    render(container, new SiteFilters());
+  #renderFilter = () => {
+    render(this.#tripContainer.querySelector('.trip-controls__filters'), new SiteFilters());
   }
 
-  #renderPageHeader = (body) => {
-    render(body, this.#HeaderComponent);
-    this.#renderInfo(body.querySelector('.trip-main__trip-info'));
-    this.#renderNavigation(body.querySelector('.trip-controls__navigation'));
-    this.#renderFilter(body.querySelector('.trip-controls__filters'));
+  #renderPageHeader = () => {
+    render(this.#tripContainer, this.#HeaderComponent);
+    this.#renderInfo();
+    this.#renderNavigation();
+    this.#renderFilter();
   }
 
-  #renderTripItems = (container) => {
-    this.#trips.forEach((trip) => this.#renderTrip(container, trip));
+  #renderTripItems = () => {
+    this.#trips.forEach((trip) => this.#renderTrip(trip));
   }
 
   #renderSort = (container) => {
@@ -125,16 +127,16 @@ export default class BoardPresenter {
   }
 
   #renderPage = (body) => {
-    this.#renderPageHeader(body);
+    this.#renderPageHeader();
     this.#renderPageMain(body);
   }
 
-  #renderBoard = (body) => {
+  #renderBoard = () => {
     if (this.#trips.length === 0) {
-      this.#renderPageHeader(body);
-      render(body, this.#noTripsComponent);
+      this.#renderPageHeader();
+      render(this.#tripContainer, this.#noTripsComponent);
     } else {
-      this.#renderPage(body);
+      this.#renderPage(this.#tripContainer);
     }
   }
 }
