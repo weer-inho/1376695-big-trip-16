@@ -77,3 +77,6 @@ export const updateItem = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
+export const getThreeRoutePoints = (array) => [array[0], array[1], array[array.length - 1]];
+export const getTotalCost = (array) => array.reduce((accumulator, trip) => accumulator + trip.price, 0);
