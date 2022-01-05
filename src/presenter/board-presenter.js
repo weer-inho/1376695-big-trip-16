@@ -8,11 +8,13 @@ import InfoMain from '../view/trip-info-main.js';
 import PageMain from '../view/page-main.js';
 import NoData from '../view/no-data.js';
 import TripPresenter from './trip-presenter.js';
-import { render, updateItem } from '../render.js';
+import { getTotalCost, getThreeRoutePoints, render, updateItem } from '../render.js';
 import { SortType, sortPrice, sortTime } from '../mock/data.js';
 
 export default class BoardPresenter {
   #tripContainer = null;
+  #sectionTripEvents = null;
+  #tripEventsList = null;
 
   #HeaderComponent = new PageHeader();
   #MainComponent = new PageMain();
@@ -21,7 +23,7 @@ export default class BoardPresenter {
   #noTripsComponent = new NoData();
 
   #trips = [];
-  #tripPresenter = new Map();
+  #tripPresenters = new Map();
   #currentSortType = SortType.DEFAULT;
   #sourcedBoardTrips = [];
 
@@ -43,18 +45,18 @@ export default class BoardPresenter {
 
     this.#sortTrips(sortType);
     this.#clearTripList();
-    this.#renderTripItems(document.querySelector('.trip-events__list'));
+    this.#renderTripItems();
     this.#currentSortType = sortType;
   }
 
   #handleModeChange = () => {
-    this.#tripPresenter.forEach((presenter) => presenter.resetView());
+    this.#tripPresenters.forEach((presenter) => presenter.resetView());
   }
 
   #handleTripChange = (updatedTrip) => {
     this.#trips = updateItem(this.#trips, updatedTrip);
 
-    this.#tripPresenter.get(updatedTrip.id).init(updatedTrip);
+    this.#tripPresenters.get(updatedTrip.id).init(updatedTrip);
   }
 
   #sortTrips = (sortType) => {
@@ -73,22 +75,20 @@ export default class BoardPresenter {
   }
 
   #clearTripList = () => {
-    this.#tripPresenter.forEach((presenter) => presenter.destroy());
-    this.#tripPresenter.clear();
+    this.#tripPresenters.forEach((presenter) => presenter.destroy());
+    this.#tripPresenters.clear();
   }
 
   #renderTrip = (trip) => {
-    const listElement = this.#tripContainer.querySelector('.trip-events__list');
-    const tripPresenter = new TripPresenter(listElement, this.#handleTripChange, this.#handleModeChange);
+    const tripPresenter = new TripPresenter(this.#tripEventsList, this.#handleTripChange, this.#handleModeChange);
     tripPresenter.init(trip);
-    this.#tripPresenter.set(trip.id, tripPresenter);
+    this.#tripPresenters.set(trip.id, tripPresenter);
   }
 
   #renderInfo = () => {
     const container = this.#tripContainer.querySelector('.trip-main__trip-info');
-    render(container, new InfoMain(this.#trips));
-    const tripCost = this.#trips.reduce((accumulator, trip) => accumulator + trip.price, 0);
-    render(container, new TripCost(tripCost));
+    render(container, new InfoMain(getThreeRoutePoints(this.#trips)));
+    render(container, new TripCost(getTotalCost(this.#trips)));
   }
 
   #renderNavigation = () => {
@@ -110,25 +110,27 @@ export default class BoardPresenter {
     this.#trips.forEach((trip) => this.#renderTrip(trip));
   }
 
-  #renderSort = (container) => {
-    render(container, this.#sortComponent);
+  #renderSort = () => {
+    render(this.#sectionTripEvents, this.#sortComponent);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
-  #renderMain = (container) => {
-    this.#renderSort(container);
-    render(container, this.#TripList);
-    this.#renderTripItems(container.querySelector('.trip-events__list'));
+  #renderMain = () => {
+    this.#renderSort();
+    render(this.#sectionTripEvents, this.#TripList);
+    this.#tripEventsList = this.#tripContainer.querySelector('.trip-events__list');
+    this.#renderTripItems();
   }
 
-  #renderPageMain = (body) => {
-    render(body, this.#MainComponent);
-    this.#renderMain(body.querySelector('.trip-events'));
+  #renderPageMain = () => {
+    render(this.#tripContainer, this.#MainComponent);
+    this.#sectionTripEvents = this.#tripContainer.querySelector('.trip-events');
+    this.#renderMain();
   }
 
-  #renderPage = (body) => {
+  #renderPage = () => {
     this.#renderPageHeader();
-    this.#renderPageMain(body);
+    this.#renderPageMain();
   }
 
   #renderBoard = () => {
@@ -136,7 +138,7 @@ export default class BoardPresenter {
       this.#renderPageHeader();
       render(this.#tripContainer, this.#noTripsComponent);
     } else {
-      this.#renderPage(this.#tripContainer);
+      this.#renderPage();
     }
   }
 }
