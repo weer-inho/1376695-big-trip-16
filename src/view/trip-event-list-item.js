@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
 import {getDuration} from '../mock/trip.js';
 
 const createListItemTemplate = (trip = {}) => {
@@ -44,7 +44,7 @@ const createListItemTemplate = (trip = {}) => {
   </li>`;
 };
 
-export default class TripEventsItem extends AbstractView {
+export default class TripEventsItem extends SmartView {
   #trip = null;
 
   constructor(trip) {
