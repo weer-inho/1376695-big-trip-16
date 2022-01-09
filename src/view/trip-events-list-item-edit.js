@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
 
 const createEventOffers = (offers) => (`<section class="event__section  event__section--offers">
@@ -90,7 +91,7 @@ const createListItemEditTemplate = (trip) => {
           <label class="event__label  event__type-output" for="event-destination-1">
           ${typePoint}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=" ${destinationCity}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
@@ -148,6 +149,7 @@ export default class TripEventsEdit extends AbstractView {
     super();
     this.#trip = trip;
 
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationInputHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typePointChanged);
   }
 
@@ -185,9 +187,18 @@ export default class TripEventsEdit extends AbstractView {
   }
 
   #typePointChanged = (evt) => {
-    // evt.preventDefault();
+    const radioInputValue = evt.target.value;
     this.updateData({
-      typePoint: evt.target.value,
+      typePoint: radioInputValue,
+      offers: generateOffer(radioInputValue),
     });
+  }
+
+  #destinationInputHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      photos: generatePhoto(),
+      destination: generateDestination(),
+    })
   }
 }

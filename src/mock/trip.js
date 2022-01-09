@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {nanoid} from 'nanoid';
 import {offerTypes, offer, cities, descriptions, getRandomInteger} from './data.js';
 
-const generateDestination = () => {
+export const generateDestination = () => {
   let description = '';
   const randomValue = getRandomInteger(1, 5);
   for (let i = 0; i < randomValue; i++) {
