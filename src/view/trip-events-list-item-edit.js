@@ -147,10 +147,31 @@ export default class TripEventsEdit extends AbstractView {
   constructor(trip) {
     super();
     this.#trip = trip;
+
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typePointChanged);
   }
 
   get template() {
     return createListItemEditTemplate(this.#trip);
+  }
+
+  updateElement = () => {
+    const prevElement = this.element;
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.element;
+
+    parent.replaceChild(newElement, prevElement);
+  }
+
+  updateData = (update) => {
+    if (!update) {
+      return;
+    }
+    this.#trip = {...this.#trip, ...update};
+
+    this.updateElement();
   }
 
   setListItemEditClickHandler = (callback) => {
@@ -161,5 +182,12 @@ export default class TripEventsEdit extends AbstractView {
   #listItemEditClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.editClick();
+  }
+
+  #typePointChanged = (evt) => {
+    // evt.preventDefault();
+    this.updateData({
+      typePoint: evt.target.value,
+    });
   }
 }
