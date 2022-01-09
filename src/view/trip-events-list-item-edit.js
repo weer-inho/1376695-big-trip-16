@@ -149,8 +149,7 @@ export default class TripEventsEdit extends AbstractView {
     super();
     this.#trip = trip;
 
-    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationInputHandler);
-    this.element.querySelector('.event__type-group').addEventListener('change', this.#typePointChanged);
+    this.#setInnerHandlers();
   }
 
   get template() {
@@ -165,6 +164,8 @@ export default class TripEventsEdit extends AbstractView {
     const newElement = this.element;
 
     parent.replaceChild(newElement, prevElement);
+
+    this.restoreHandlers();
   }
 
   updateData = (update) => {
@@ -179,6 +180,16 @@ export default class TripEventsEdit extends AbstractView {
   setListItemEditClickHandler = (callback) => {
     this._callback.editClick = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#listItemEditClickHandler);
+  }
+
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setListItemEditClickHandler(this._callback.editClick);
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationInputHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typePointChanged);
   }
 
   #listItemEditClickHandler = (evt) => {
