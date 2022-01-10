@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
 import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
 
@@ -23,7 +24,7 @@ ${photos.map((photo) => `<img class="event__photo" src="${photo}" alt="Event pho
 `);
 
 const createListItemEditTemplate = (trip) => {
-  const {destinationCity, typePoint, offers, startDate, endDate, destination, price, photos} = trip;
+  const {typePoint, offers, startDate, endDate, destination, price, photos} = trip;
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -142,7 +143,7 @@ const createListItemEditTemplate = (trip) => {
     </li>`;
 };
 
-export default class TripEventsEdit extends AbstractView {
+export default class TripEventsEdit extends SmartView {
   #trip = null;
 
   constructor(trip) {
@@ -154,27 +155,6 @@ export default class TripEventsEdit extends AbstractView {
 
   get template() {
     return createListItemEditTemplate(this.#trip);
-  }
-
-  updateElement = () => {
-    const prevElement = this.element;
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.element;
-
-    parent.replaceChild(newElement, prevElement);
-
-    this.restoreHandlers();
-  }
-
-  updateData = (update) => {
-    if (!update) {
-      return;
-    }
-    this.#trip = {...this.#trip, ...update};
-
-    this.updateElement();
   }
 
   setListItemEditClickHandler = (callback) => {
@@ -210,6 +190,6 @@ export default class TripEventsEdit extends AbstractView {
     this.updateData({
       photos: generatePhoto(),
       destination: generateDestination(),
-    })
+    });
   }
 }
