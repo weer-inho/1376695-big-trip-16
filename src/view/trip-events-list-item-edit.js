@@ -146,9 +146,12 @@ const createListItemEditTemplate = (trip) => {
 };
 
 export default class TripEventsEdit extends SmartView {
+  #datepicker = null;
+
   constructor(trip) {
     super(trip);
     this.#setInnerHandlers();
+    this.#setDatepicker();
   }
 
   get template() {
@@ -163,6 +166,48 @@ export default class TripEventsEdit extends SmartView {
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setListItemEditClickHandler(this._callback.editClick);
+    this.#setDatepicker();
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  }
+
+  #setDatepicker = () => {
+    this.#datepicker = flatpickr(
+      this.element.querySelector('.event__input--time[name="event-start-time"]'),
+      {
+        dateFormat: 'd/m/Y H:i',
+        defaultDate: this.getData().startDate,
+        onChange: this.#dateStartChangeHandler,
+      },
+    );
+
+    this.#datepicker = flatpickr(
+      this.element.querySelector('.event__input--time[name="event-end-time"]'),
+      {
+        dateFormat: 'd/m/Y H:i',
+        defaultDate: this.getData().endDate,
+        onChange: this.#dateEndChangeHandler,
+      },
+    );
+  }
+
+  #dateStartChangeHandler = ([userDate]) => {
+    this.updateData({
+      startDate: userDate,
+    });
+  }
+
+  #dateEndChangeHandler = ([userDate]) => {
+    this.updateData({
+      endDate: userDate,
+    });
   }
 
   #setInnerHandlers = () => {
