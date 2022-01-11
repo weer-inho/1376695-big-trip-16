@@ -1,11 +1,11 @@
 import AbstractView from './abstract-view.js';
 
 export default class SmartView extends AbstractView {
-  #trip = null;
+  _trip = {};
 
   constructor(trip) {
     super();
-    this.#trip = trip;
+    this._trip = trip;
   }
 
   updateElement = () => {
@@ -24,7 +24,7 @@ export default class SmartView extends AbstractView {
     if (!update) {
       return;
     }
-    this.#trip = {...this.#trip, ...update};
+    this._trip = {...this._trip, ...update};
 
     this.updateElement();
   }
