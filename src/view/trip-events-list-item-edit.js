@@ -1,4 +1,3 @@
-import AbstractView from './abstract-view.js';
 import SmartView from './smart-view.js';
 import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
