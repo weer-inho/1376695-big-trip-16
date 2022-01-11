@@ -1,6 +1,9 @@
 import SmartView from './smart-view.js';
 import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createEventOffers = (offers) => (`<section class="event__section  event__section--offers">
 ${(offers.length === 0) ? '' : `<h3 class="event__section-title  event__section-title--offers">Offers</h3>
