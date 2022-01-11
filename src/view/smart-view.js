@@ -1,12 +1,14 @@
 import AbstractView from './abstract-view.js';
 
 export default class SmartView extends AbstractView {
-  _trip = {};
+  #buffer = {};
 
   constructor(trip) {
     super();
-    this._trip = trip;
+    this.#buffer = trip;
   }
+
+  getData = () => this.#buffer;
 
   updateElement = () => {
     const prevElement = this.element;
@@ -24,7 +26,7 @@ export default class SmartView extends AbstractView {
     if (!update) {
       return;
     }
-    this._trip = {...this._trip, ...update};
+    this.#buffer = {...this.#buffer, ...update};
 
     this.updateElement();
   }

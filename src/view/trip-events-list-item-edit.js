@@ -144,14 +144,12 @@ const createListItemEditTemplate = (trip) => {
 
 export default class TripEventsEdit extends SmartView {
   constructor(trip) {
-    super();
-    this._trip = trip;
-
+    super(trip);
     this.#setInnerHandlers();
   }
 
   get template() {
-    return createListItemEditTemplate(this._trip);
+    return createListItemEditTemplate(this.getData());
   }
 
   setListItemEditClickHandler = (callback) => {
