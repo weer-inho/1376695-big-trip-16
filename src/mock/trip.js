@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {nanoid} from 'nanoid';
 import {offerTypes, offer, cities, descriptions, getRandomInteger} from './data.js';
 
-const generateDestination = () => {
+export const generateDestination = () => {
   let description = '';
   const randomValue = getRandomInteger(1, 5);
   for (let i = 0; i < randomValue; i++) {
@@ -18,13 +18,15 @@ const generateTypePoint = () => {
   return offerTypes[randomIndex];
 };
 
-const generatePhoto = () => {
+export const generatePhoto = () => {
   const photos = [];
   for (let i = 0; i < getRandomInteger(1,10); i++) {
     photos.push(`http://picsum.photos/248/152?r=${Math.floor(Math.random()*100)}`);
   }
   return photos;
 };
+
+export const generateOffer = (typePoint) => offer[typePoint];
 
 export const formatTime = (time) => (String(time).length === 1) ? `0${time}` : time;
 
@@ -51,7 +53,7 @@ export const generateTrip = () => {
     id: nanoid(),
     typePoint,
     destinationCity: cities[getRandomInteger(0, cities.length - 1)],
-    offers: offer[typePoint],
+    offers: generateOffer(typePoint),
     destination: generateDestination(),
     photos: generatePhoto(),
     price: getRandomInteger(1, 10000),

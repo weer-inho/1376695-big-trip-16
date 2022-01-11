@@ -1,4 +1,5 @@
-import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
+import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
 
 const createEventOffers = (offers) => (`<section class="event__section  event__section--offers">
@@ -22,7 +23,7 @@ ${photos.map((photo) => `<img class="event__photo" src="${photo}" alt="Event pho
 `);
 
 const createListItemEditTemplate = (trip) => {
-  const {destinationCity, typePoint, offers, startDate, endDate, destination, price, photos} = trip;
+  const {typePoint, offers, startDate, endDate, destination, price, photos} = trip;
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -90,7 +91,7 @@ const createListItemEditTemplate = (trip) => {
           <label class="event__label  event__type-output" for="event-destination-1">
           ${typePoint}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=" ${destinationCity}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
@@ -141,16 +142,14 @@ const createListItemEditTemplate = (trip) => {
     </li>`;
 };
 
-export default class TripEventsEdit extends AbstractView {
-  #trip = null;
-
+export default class TripEventsEdit extends SmartView {
   constructor(trip) {
-    super();
-    this.#trip = trip;
+    super(trip);
+    this.#setInnerHandlers();
   }
 
   get template() {
-    return createListItemEditTemplate(this.#trip);
+    return createListItemEditTemplate(this.getData());
   }
 
   setListItemEditClickHandler = (callback) => {
@@ -158,8 +157,34 @@ export default class TripEventsEdit extends AbstractView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#listItemEditClickHandler);
   }
 
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setListItemEditClickHandler(this._callback.editClick);
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationInputHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typePointChanged);
+  }
+
   #listItemEditClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.editClick();
+  }
+
+  #typePointChanged = (evt) => {
+    const radioInputValue = evt.target.value;
+    this.updateData({
+      typePoint: radioInputValue,
+      offers: generateOffer(radioInputValue),
+    });
+  }
+
+  #destinationInputHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      photos: generatePhoto(),
+      destination: generateDestination(),
+    });
   }
 }
