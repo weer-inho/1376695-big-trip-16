@@ -1,8 +1,7 @@
 import SmartView from './smart-view.js';
-import {makePicker, DATE_FORMAT} from '../render.js'
+import {makePicker} from '../render.js';
 import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
-import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -190,7 +189,7 @@ export default class TripEventsEdit extends SmartView {
       this.element.querySelector('.event__input--time[name="event-end-time"]'),
       this.getData().endDate,
       this.#dateEndChangeHandler,
-    )
+    );
   }
 
   #dateStartChangeHandler = ([userDate]) => {
