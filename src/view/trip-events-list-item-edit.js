@@ -179,24 +179,17 @@ export default class TripEventsEdit extends SmartView {
   }
 
   #setDatepicker = () => {
-    this.#datepicker = flatpickr(
+    this.#datepicker = makePicker (
       this.element.querySelector('.event__input--time[name="event-start-time"]'),
-      {
-        dateFormat: 'd/m/Y H:i',
-        defaultDate: this.getData().startDate,
-        onChange: this.#dateStartChangeHandler,
-      },
+      this.getData().startDate,
+      this.#dateStartChangeHandler,
     );
 
-    this.#datepicker = flatpickr(
+    this.#datepicker = makePicker (
       this.element.querySelector('.event__input--time[name="event-end-time"]'),
-      {
-        dateFormat: 'd/m/Y H:i',
-        defaultDate: this.getData().endDate,
-        onChange: this.#dateEndChangeHandler,
-      },
-    );
-  }
+      this.getData().endDate,
+      this.#dateEndChangeHandler,
+    )
 
   #dateStartChangeHandler = ([userDate]) => {
     this.updateData({
