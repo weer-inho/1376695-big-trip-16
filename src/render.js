@@ -1,4 +1,5 @@
 import AbstractView from './view/abstract-view';
+import flatpickr from 'flatpickr';
 
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -80,3 +81,5 @@ export const updateItem = (items, update) => {
 
 export const getThreeRoutePoints = (array) => [array[0], array[1], array[array.length - 1]];
 export const getTotalCost = (array) => array.reduce((accumulator, trip) => accumulator + trip.price, 0);
+const DATE_FORMAT = 'd/m/Y H:i';
+export const makePicker = (target, initialValue, onChange)=>flatpickr(target,{dateFormat:DATE_FORMAT, defaultDate: initialValue, onChange});
