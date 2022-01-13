@@ -1,6 +1,9 @@
 import SmartView from './smart-view.js';
 import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
+import {makePicker} from '../render.js';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createEventOffers = (offers) => (`<section class="event__section  event__section--offers">
 ${(offers.length === 0) ? '' : `<h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -143,9 +146,12 @@ const createListItemEditTemplate = (trip) => {
 };
 
 export default class TripEventsEdit extends SmartView {
+  #datepicker = null;
+
   constructor(trip) {
     super(trip);
     this.#setInnerHandlers();
+    this.#setDatepicker();
   }
 
   get template() {
@@ -160,6 +166,42 @@ export default class TripEventsEdit extends SmartView {
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setListItemEditClickHandler(this._callback.editClick);
+    this.#setDatepicker();
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  }
+
+  #setDatepicker = () => {
+    this.#datepicker = makePicker (
+      this.element.querySelector('.event__input--time[name="event-start-time"]'),
+      this.getData().startDate,
+      this.#dateStartChangeHandler,
+    );
+
+    this.#datepicker = makePicker (
+      this.element.querySelector('.event__input--time[name="event-end-time"]'),
+      this.getData().endDate,
+      this.#dateEndChangeHandler,
+    );
+  }
+
+  #dateStartChangeHandler = ([userDate]) => {
+    this.updateData({
+      startDate: userDate,
+    });
+  }
+
+  #dateEndChangeHandler = ([userDate]) => {
+    this.updateData({
+      endDate: userDate,
+    });
   }
 
   #setInnerHandlers = () => {
