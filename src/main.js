@@ -9,4 +9,4 @@ const tripsModel = new TripsModel();
 tripsModel.trips = trips;
 
 const boardPresenter = new BoardPresenter(document.querySelector('.page-body'), tripsModel);
-boardPresenter.init(trips);
+boardPresenter.init();

@@ -31,16 +31,23 @@ export default class BoardPresenter {
   constructor(tripContainer, tripsModel) {
     this.#tripContainer = tripContainer;
     this.#tripsModel = tripsModel;
+    this.#sourcedBoardTrips = [...this.#tripsModel.trips];
   }
 
   get trips() {
+    switch (this.#currentSortType) {
+      case SortType.PRICE:
+        return this.#tripsModel.trips.sort(sortPrice);
+      case SortType.TIME:
+        return this.#tripsModel.trips.sort(sortTime);
+      case SortType.DEFAULT:
+        return [...this.#tripsModel.trips];
+      default:
+    }
     return this.#tripsModel.trips;
   }
 
-  init = (trips) => {
-    this.#trips = [...trips];
-    this.#sourcedBoardTrips = [...trips];
-
+  init = () => {
     this.#renderBoard();
   }
 
@@ -60,7 +67,7 @@ export default class BoardPresenter {
   }
 
   #handleTripChange = (updatedTrip) => {
-    this.#trips = updateItem(this.#trips, updatedTrip);
+    this.#tripsModel.trips = updateItem(this.#tripsModel.trips, updatedTrip);
 
     this.#tripPresenters.get(updatedTrip.id).init(updatedTrip);
   }
@@ -68,13 +75,13 @@ export default class BoardPresenter {
   #sortTrips = (sortType) => {
     switch (sortType) {
       case SortType.PRICE:
-        this.#trips.sort(sortPrice);
+        this.#tripsModel.trips.sort(sortPrice);
         break;
       case SortType.TIME:
-        this.#trips.sort(sortTime);
+        this.#tripsModel.trips.sort(sortTime);
         break;
       case SortType.DEFAULT:
-        this.#trips = [...this.#sourcedBoardTrips];
+        this.#tripsModel.trips = [...this.#sourcedBoardTrips];
         break;
       default:
     }
@@ -93,8 +100,8 @@ export default class BoardPresenter {
 
   #renderInfo = () => {
     const container = this.#tripContainer.querySelector('.trip-main__trip-info');
-    render(container, new InfoMain(getThreeRoutePoints(this.#trips)));
-    render(container, new TripCost(getTotalCost(this.#trips)));
+    render(container, new InfoMain(getThreeRoutePoints(this.#tripsModel.trips)));
+    render(container, new TripCost(getTotalCost(this.#tripsModel.trips)));
   }
 
   #renderNavigation = () => {
@@ -113,7 +120,7 @@ export default class BoardPresenter {
   }
 
   #renderTripItems = () => {
-    this.#trips.forEach((trip) => this.#renderTrip(trip));
+    this.#tripsModel.trips.forEach((trip) => this.#renderTrip(trip));
   }
 
   #renderSort = () => {
@@ -140,7 +147,7 @@ export default class BoardPresenter {
   }
 
   #renderBoard = () => {
-    if (this.#trips.length === 0) {
+    if (this.#tripsModel.trips.length === 0) {
       this.#renderPageHeader();
       render(this.#tripContainer, this.#noTripsComponent);
     } else {
