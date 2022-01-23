@@ -12,7 +12,7 @@ export default class TripsModel extends AbstractObservable {
     return this.#trips;
   }
 
-  updateTrips = (updateType, update) => {
+  updateTrip = (updateType, update) => {
     const index = this.#trips.findIndex((trip) => trip.id === update.id);
 
     if (index === -1) {
