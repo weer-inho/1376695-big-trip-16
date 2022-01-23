@@ -84,3 +84,15 @@ export const getTotalCost = (array) => array.reduce((accumulator, trip) => accum
 
 export const DATE_FORMAT = 'd/m/Y H:i';
 export const makePicker = (target, initialValue, onChange)=>flatpickr(target,{dateFormat:DATE_FORMAT, defaultDate: initialValue, onChange});
+
+export const UserAction = {
+  UPDATE_TRIP: 'UPDATE_TRIP',
+  ADD_TRIP: 'ADD_TRIP',
+  DELETE_TRIP: 'DELETE_TRIP',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};

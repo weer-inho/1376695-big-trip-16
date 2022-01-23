@@ -1,6 +1,6 @@
 import TripEventsEdit from '../view/trip-events-list-item-edit.js';
 import TripEventsItem from '../view/trip-event-list-item.js';
-import { render, replace, remove } from '../utils.js';
+import { render, replace, remove, UserAction, UpdateType } from '../utils.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -92,7 +92,11 @@ export default class TripPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#trip, isFavorite: !this.#trip.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_TRIP,
+      UpdateType.MINOR,
+      {...this.#trip, isFavorite: !this.#trip.isFavorite}
+    );
   }
 
   #handleFormSubmit = () => {

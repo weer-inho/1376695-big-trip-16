@@ -32,6 +32,8 @@ export default class BoardPresenter {
     this.#tripContainer = tripContainer;
     this.#tripsModel = tripsModel;
     this.#sourcedBoardTrips = [...this.#tripsModel.trips];
+
+    this.#tripsModel.addObserver(this.#handleModelEvent);
   }
 
   get trips() {
@@ -45,6 +47,22 @@ export default class BoardPresenter {
       default:
     }
     return this.#tripsModel.trips;
+  }
+
+  #handleViewAction = (actionType, updateType, update) => {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  }
+
+  #handleModelEvent = (updateType, data) => {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   }
 
   init = () => {
@@ -93,7 +111,7 @@ export default class BoardPresenter {
   }
 
   #renderTrip = (trip) => {
-    const tripPresenter = new TripPresenter(this.#tripEventsList, this.#handleTripChange, this.#handleModeChange);
+    const tripPresenter = new TripPresenter(this.#tripEventsList, this.#handleViewAction, this.#handleModeChange);
     tripPresenter.init(trip);
     this.#tripPresenters.set(trip.id, tripPresenter);
   }
