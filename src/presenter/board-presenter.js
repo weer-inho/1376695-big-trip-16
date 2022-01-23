@@ -126,6 +126,20 @@ export default class BoardPresenter {
     this.#tripPresenters.clear();
   }
 
+  #clearBoard = ({resetSortType = false} = {}) => {
+    const tripCount = this.trips.length;
+
+    this.#tripPresenters.forEach((presenter) => presenter.destroy());
+    this.#tripPresenters.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noTripsComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DEFAULT;
+    }
+  }
+
   #renderTrip = (trip) => {
     const tripPresenter = new TripPresenter(this.#tripEventsList, this.#handleViewAction, this.#handleModeChange);
     tripPresenter.init(trip);
