@@ -1,6 +1,6 @@
 import TripEventsEdit from '../view/trip-events-list-item-edit.js';
 import TripEventsItem from '../view/trip-event-list-item.js';
-import { render, replace, remove } from '../render.js';
+import { render, replace, remove } from '../utils.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',

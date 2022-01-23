@@ -1,5 +1,5 @@
 import SmartView from './smart-view.js';
-import {makePicker} from '../render.js';
+import {makePicker} from '../utils.js';
 import {generateOffer, generatePhoto, generateDestination} from '../mock/trip.js';
 import dayjs from 'dayjs';
 

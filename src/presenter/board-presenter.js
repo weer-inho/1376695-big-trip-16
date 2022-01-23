@@ -8,11 +8,12 @@ import InfoMain from '../view/trip-info-main.js';
 import PageMain from '../view/page-main.js';
 import NoData from '../view/no-data.js';
 import TripPresenter from './trip-presenter.js';
-import { getTotalCost, getThreeRoutePoints, render, updateItem } from '../render.js';
+import { getTotalCost, getThreeRoutePoints, render, updateItem } from '../utils.js';
 import { SortType, sortPrice, sortTime } from '../mock/data.js';
 
 export default class BoardPresenter {
   #tripContainer = null;
+  #tripsModel = null;
   #sectionTripEvents = null;
   #tripEventsList = null;
 
@@ -27,8 +28,13 @@ export default class BoardPresenter {
   #currentSortType = SortType.DEFAULT;
   #sourcedBoardTrips = [];
 
-  constructor(tripContainer) {
+  constructor(tripContainer, tripsModel) {
     this.#tripContainer = tripContainer;
+    this.#tripsModel = tripsModel;
+  }
+
+  get trips() {
+    return this.#tripsModel.trips;
   }
 
   init = (trips) => {

@@ -1,7 +1,12 @@
 import BoardPresenter from './presenter/board-presenter.js';
 import {generateTrip} from './mock/trip.js';
+import TripsModel from './model/trips-model.js';
 
 const TRIP_COUNT = 3;
 const trips = Array.from({length: TRIP_COUNT}, generateTrip);
-const boardPresenter = new BoardPresenter(document.querySelector('.page-body'));
+
+const tripsModel = new TripsModel();
+tripsModel.trips = trips;
+
+const boardPresenter = new BoardPresenter(document.querySelector('.page-body'), tripsModel);
 boardPresenter.init(trips);
