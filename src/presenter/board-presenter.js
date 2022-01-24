@@ -8,7 +8,7 @@ import InfoMain from '../view/trip-info-main.js';
 import PageMain from '../view/page-main.js';
 import NoData from '../view/no-data.js';
 import TripPresenter from './trip-presenter.js';
-import { getTotalCost, getThreeRoutePoints, render, updateItem, UserAction, UpdateType } from '../utils.js';
+import { getTotalCost, getThreeRoutePoints, render, remove, updateItem, UserAction, UpdateType } from '../utils.js';
 import { SortType, sortPrice, sortTime } from '../mock/data.js';
 
 export default class BoardPresenter {
@@ -127,8 +127,6 @@ export default class BoardPresenter {
   }
 
   #clearBoard = ({resetSortType = false} = {}) => {
-    const tripCount = this.trips.length;
-
     this.#tripPresenters.forEach((presenter) => presenter.destroy());
     this.#tripPresenters.clear();
 

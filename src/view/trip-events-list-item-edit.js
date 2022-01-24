@@ -163,6 +163,12 @@ export default class TripEventsEdit extends SmartView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#listItemEditClickHandler);
   }
 
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler)
+  }
+
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setListItemEditClickHandler(this._callback.editClick);
@@ -196,6 +202,13 @@ export default class TripEventsEdit extends SmartView {
     this.updateData({
       startDate: userDate,
     });
+  }
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+
+    console.log('YA UDALAUS')
+    this._callback.deleteClick();
   }
 
   #dateEndChangeHandler = ([userDate]) => {
