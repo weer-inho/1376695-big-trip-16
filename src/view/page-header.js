@@ -27,4 +27,14 @@ export default class PageHeader extends AbstractView {
   get template() {
     return createPageHeaderTemplate();
   }
+
+  setNewEventHandler = (callback) => {
+    this._callback.newEvent = callback;
+    this.element.querySelector('.trip-main__event-add-btn').addEventListener('click', this.#newEventHandler);
+  }
+
+  #newEventHandler = (evt) => {
+    evt.preventDefault(evt);
+    this._callback.newEvent();
+  }
 }

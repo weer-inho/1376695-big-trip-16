@@ -80,11 +80,11 @@ export default class TripPresenter {
     this.#mode = Mode.DEFAULT;
   };
 
-  #handleDeleteClick = (trip) => {
+  #handleDeleteClick = () => {
     this.#changeData(
       UserAction.DELETE_TRIP,
       UpdateType.MINOR,
-      trip,
+      this.#trip,
     );
   }
 

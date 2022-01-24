@@ -166,7 +166,7 @@ export default class TripEventsEdit extends SmartView {
   setDeleteClickHandler = (callback) => {
     this._callback.deleteClick = callback;
 
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler)
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
   }
 
   restoreHandlers = () => {
@@ -207,7 +207,6 @@ export default class TripEventsEdit extends SmartView {
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
 
-    console.log('YA UDALAUS')
     this._callback.deleteClick();
   }
 

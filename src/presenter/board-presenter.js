@@ -50,7 +50,6 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_TRIP:
         this.#tripsModel.updateTrip(updateType, update);
@@ -65,7 +64,6 @@ export default class BoardPresenter {
   }
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
     // В зависимости от типа изменений решаем, что делать:
     switch (updateType) {
       case UpdateType.PATCH:
@@ -73,7 +71,8 @@ export default class BoardPresenter {
         this.tripPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
+        this.#clearTripList();
+        this.#renderTripItems();
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
@@ -83,6 +82,8 @@ export default class BoardPresenter {
 
   init = () => {
     this.#renderBoard();
+
+    this.#HeaderComponent.setNewEventHandler(() => console.log('new event'));
   }
 
   #handleSortTypeChange = (sortType) => {
