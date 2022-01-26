@@ -1,5 +1,6 @@
 import AbstractView from './view/abstract-view';
 import flatpickr from 'flatpickr';
+import dayjs from 'dayjs';
 
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -102,3 +103,4 @@ export const FilterType = {
   FUTURE: 'FUTURE',
   PAST: 'PAST',
 };
+

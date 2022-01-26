@@ -25,4 +25,14 @@ export default class SiteFilters extends AbstractView {
   get template() {
     return createSiteFiltersTemplate();
   }
+
+  setFilterTypeChangeHandler = (callback) => {
+    this._callback.filterTypeChange = callback;
+    this.element.querySelector('.trip-filters').addEventListener('change', this.#filterTypeChangeHandler);
+  }
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.value);
+  }
 }
