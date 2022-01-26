@@ -5,6 +5,37 @@ import dayjs from 'dayjs';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
+const testObject = {
+  'id': 'UgUoiHHwUOLEb6m8eqIdW',
+  'typePoint': 'taxi',
+  'destinationCity': 'Vienna',
+  'offers': [
+    {
+      'id': 1,
+      'title': 'Switch to comfort',
+      'price': 74,
+      'selected': false
+    },
+    {
+      'id': 2,
+      'title': 'Choose the radio station',
+      'price': 1,
+      'selected': true
+    }
+  ],
+  'destination': 'Sed sed nisi sed augue convallis suscipit in sed felis. ',
+  'photos': [
+    'http://picsum.photos/248/152?r=15',
+    'http://picsum.photos/248/152?r=85',
+    'http://picsum.photos/248/152?r=21',
+    'http://picsum.photos/248/152?r=21'
+  ],
+  'price': 548,
+  'startDate': '2022-01-23T03:44:38.211Z',
+  'endDate': '2022-01-26T22:41:38.211Z',
+  'isFavorite': true,
+};
+
 const createEventOffers = (offers) => (`<section class="event__section  event__section--offers">
 ${(offers.length === 0) ? '' : `<h3 class="event__section-title  event__section-title--offers">Offers</h3>
 <div class="event__available-offers">
@@ -148,7 +179,7 @@ const createListItemEditTemplate = (trip) => {
 export default class TripEventsEdit extends SmartView {
   #datepicker = null;
 
-  constructor(trip) {
+  constructor(trip = testObject) {
     super(trip);
     this.#setInnerHandlers();
     this.#setDatepicker();
@@ -167,6 +198,18 @@ export default class TripEventsEdit extends SmartView {
     this._callback.deleteClick = callback;
 
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  }
+
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#formSubmitkHandler);
+  }
+
+  #formSubmitkHandler = (evt) => {
+    evt.preventDefault();
+
+    this._callback.formSubmit();
   }
 
   restoreHandlers = () => {

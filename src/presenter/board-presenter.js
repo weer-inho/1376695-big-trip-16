@@ -6,6 +6,7 @@ import MainNavigation from '../view/menu-navigation.js';
 import TripCost from '../view/trip-info-cost.js';
 import InfoMain from '../view/trip-info-main.js';
 import PageMain from '../view/page-main.js';
+import TripNewPresenter from './trip-new-presenter.js';
 import NoData from '../view/no-data.js';
 import TripPresenter from './trip-presenter.js';
 import { getTotalCost, getThreeRoutePoints, render, remove, updateItem, UserAction, UpdateType } from '../utils.js';
@@ -22,6 +23,7 @@ export default class BoardPresenter {
   #TripList =  new TripList();
   #sortComponent = new MainSort();
   #noTripsComponent = new NoData();
+  #tripNewPresenter = null;
 
   #trips = [];
   #tripPresenters = new Map();
@@ -34,6 +36,17 @@ export default class BoardPresenter {
     this.#sourcedBoardTrips = [...this.#tripsModel.trips];
 
     this.#tripsModel.addObserver(this.#handleModelEvent);
+    this.#tripNewPresenter = new TripNewPresenter(this.#tripContainer, this.#handleViewAction);
+  }
+  
+  init = () => {
+    this.#renderBoard();
+  }
+
+  createTask = () => {
+    this.#currentSortType = SortType.DEFAULT;
+    //this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+    this.#tripNewPresenter.init();
   }
 
   get trips() {
@@ -76,14 +89,10 @@ export default class BoardPresenter {
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
+        this.#clearTripList();
+        this.#renderTripItems();
         break;
     }
-  }
-
-  init = () => {
-    this.#renderBoard();
-
-    this.#HeaderComponent.setNewEventHandler(() => console.log('new event'));
   }
 
   #handleSortTypeChange = (sortType) => {

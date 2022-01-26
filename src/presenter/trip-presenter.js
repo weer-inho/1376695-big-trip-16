@@ -1,6 +1,6 @@
 import TripEventsEdit from '../view/trip-events-list-item-edit.js';
 import TripEventsItem from '../view/trip-event-list-item.js';
-import { render, replace, remove, UserAction, UpdateType } from '../utils.js';
+import { render, replace, remove, UserAction, UpdateType, RenderPosition } from '../utils.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -40,7 +40,7 @@ export default class TripPresenter {
     this.#tripEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
     if (prevTripComponent === null || prevTripEditComponent === null) {
-      render(this.#tripListContainer, this.#tripComponent);
+      render(this.#tripListContainer, this.#tripComponent, RenderPosition.AFTERBEGIN);
       return;
     }
 

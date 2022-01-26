@@ -10,3 +10,9 @@ tripsModel.trips = trips;
 
 const boardPresenter = new BoardPresenter(document.querySelector('.page-body'), tripsModel);
 boardPresenter.init();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  console.log('new event');
+  boardPresenter.createTask();
+});
