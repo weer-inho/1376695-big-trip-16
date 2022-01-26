@@ -1,10 +1,12 @@
 import BoardPresenter from './presenter/board-presenter.js';
 import {generateTrip} from './mock/trip.js';
 import TripsModel from './model/trips-model.js';
+import FilterModel from './model/filter-model.js';
 
 const TRIP_COUNT = 3;
 const trips = Array.from({length: TRIP_COUNT}, generateTrip);
 
+const filterModel = new FilterModel();
 const tripsModel = new TripsModel();
 tripsModel.trips = trips;
 
