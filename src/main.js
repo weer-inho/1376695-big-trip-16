@@ -1,4 +1,5 @@
 import BoardPresenter from './presenter/board-presenter.js';
+import FilterPresenter from './presenter/filter-presenter.js';
 import {generateTrip} from './mock/trip.js';
 import TripsModel from './model/trips-model.js';
 import FilterModel from './model/filter-model.js';
@@ -16,6 +17,9 @@ tripsModel.trips = trips;
 
 const boardPresenter = new BoardPresenter(document.querySelector('.page-body'), tripsModel);
 boardPresenter.init();
+
+const filterPresenter = new FilterPresenter(document.querySelector('.page-body'), filterModel, tripsModel);
+filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
