@@ -202,13 +202,11 @@ export default class TripEventsEdit extends SmartView {
 
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
-
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#formSubmitkHandler);
   }
 
   #formSubmitkHandler = (evt) => {
     evt.preventDefault();
-
     this._callback.formSubmit();
   }
 

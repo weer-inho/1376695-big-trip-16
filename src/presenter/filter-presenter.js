@@ -1,5 +1,5 @@
 import SiteFilters from '../view/site-menu-filters.js';
-import {render, RenderPosition, replace, remove, UpdateType} from '../utils.js';
+import {render, replace, remove, UpdateType} from '../utils.js';
 
 export default class FilterPresenter {
   #filterContainer = null;

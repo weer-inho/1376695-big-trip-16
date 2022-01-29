@@ -1,4 +1,3 @@
-import SiteFilters from '../view/site-menu-filters.js';
 import MainSort from '../view/main-sort.js';
 import TripList from '../view/trip-events-list.js';
 import PageHeader from '../view/page-header.js';
@@ -6,8 +5,9 @@ import MainNavigation from '../view/menu-navigation.js';
 import TripCost from '../view/trip-info-cost.js';
 import InfoMain from '../view/trip-info-main.js';
 import PageMain from '../view/page-main.js';
-import TripNewPresenter from './trip-new-presenter.js';
 import NoData from '../view/no-data.js';
+import TripNewPresenter from './trip-new-presenter.js';
+import FilterPresenter from './filter-presenter.js';
 import TripPresenter from './trip-presenter.js';
 import { getTotalCost, getThreeRoutePoints, render, remove, updateItem, UserAction, UpdateType } from '../utils.js';
 import { SortType, sortPrice, sortTime } from '../mock/data.js';
@@ -17,6 +17,7 @@ export default class BoardPresenter {
   #tripsModel = null;
   #sectionTripEvents = null;
   #tripEventsList = null;
+  #filterModel = null;
 
   #HeaderComponent = new PageHeader();
   #MainComponent = new PageMain();
@@ -30,15 +31,16 @@ export default class BoardPresenter {
   #currentSortType = SortType.DEFAULT;
   #sourcedBoardTrips = [];
 
-  constructor(tripContainer, tripsModel) {
+  constructor(tripContainer, tripsModel, filterModel) {
     this.#tripContainer = tripContainer;
     this.#tripsModel = tripsModel;
+    this.#filterModel = tripsModel;
     this.#sourcedBoardTrips = [...this.#tripsModel.trips];
 
     this.#tripsModel.addObserver(this.#handleModelEvent);
     this.#tripNewPresenter = new TripNewPresenter(this.#tripContainer, this.#handleViewAction);
   }
-  
+
   init = () => {
     this.#renderBoard();
   }
@@ -89,8 +91,8 @@ export default class BoardPresenter {
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
-        this.#clearTripList();
-        this.#renderTripItems();
+        this.#clearBoard();
+        this.#renderBoard();
         break;
     }
   }
@@ -142,6 +144,7 @@ export default class BoardPresenter {
 
     remove(this.#sortComponent);
     remove(this.#noTripsComponent);
+    remove(this.#HeaderComponent);
 
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;
@@ -165,7 +168,8 @@ export default class BoardPresenter {
   }
 
   #renderFilter = () => {
-    render(this.#tripContainer.querySelector('.trip-controls__filters'), new SiteFilters());
+    const filterPresenter = new FilterPresenter(this.#tripContainer.querySelector('.trip-controls__filters'), this.#filterModel, this.#tripsModel);
+    filterPresenter.init();
   }
 
   #renderPageHeader = () => {

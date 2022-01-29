@@ -39,7 +39,7 @@ export default class MainSort extends AbstractView {
   }
 
   get template() {
-    return createMainSortTemplate(this.#currentSortType);
+    return createMainSortTemplate(this.#currentSortType = SortType.DEFAULT);
   }
 
   setSortTypeChangeHandler = (callback) => {

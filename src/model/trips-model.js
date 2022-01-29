@@ -1,4 +1,4 @@
-import { UpdateType } from '../utils.js';
+// import { UpdateType } from '../utils.js';
 import AbstractObservable from './abstract-observer.js';
 
 export default class TripsModel extends AbstractObservable {
@@ -33,7 +33,6 @@ export default class TripsModel extends AbstractObservable {
       update,
       ...this.#trips,
     ];
-
     this._notify(updateType, update);
   }
 

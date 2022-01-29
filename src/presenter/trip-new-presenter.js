@@ -1,6 +1,7 @@
 import TripEventsEdit from '../view/trip-events-list-item-edit.js';
 import {nanoid} from 'nanoid';
-import { render, replace, remove, UserAction, UpdateType } from '../utils.js';
+import { testEditObject } from '../utils.js';
+import { render, remove, UserAction, UpdateType } from '../utils.js';
 
 export default class TripNewPresenter {
   #tripListContainer = null;
@@ -18,7 +19,7 @@ export default class TripNewPresenter {
       return;
     }
 
-    this.#tripEditComponent = new TripEventsEdit();
+    this.#tripEditComponent = new TripEventsEdit(testEditObject);
     this.#tripEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     // this.#tripEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
@@ -38,13 +39,13 @@ export default class TripNewPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  #handleFormSubmit = (task) => {
+  #handleFormSubmit = () => {
     this.#changeData(
-      UserAction.ADD_TASK,
+      UserAction.ADD_TRIP,
       UpdateType.MINOR,
       // Пока у нас нет сервера, который бы после сохранения
       // выдывал честный id задачи, нам нужно позаботиться об этом самим
-      {id: nanoid(), ...task},
+      {id: nanoid(), ...testEditObject},
     );
     this.destroy();
   }

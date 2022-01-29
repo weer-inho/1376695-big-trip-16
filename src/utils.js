@@ -1,6 +1,5 @@
 import AbstractView from './view/abstract-view';
 import flatpickr from 'flatpickr';
-import dayjs from 'dayjs';
 
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -104,3 +103,33 @@ export const FilterType = {
   PAST: 'PAST',
 };
 
+export const testEditObject = {
+  'id': 'UgUoiHHwUOLEb6m8eqIdW',
+  'typePoint': 'taxi',
+  'destinationCity': 'Vienna',
+  'offers': [
+    {
+      'id': 1,
+      'title': 'Switch to comfort',
+      'price': 74,
+      'selected': false
+    },
+    {
+      'id': 2,
+      'title': 'Choose the radio station',
+      'price': 1,
+      'selected': true
+    }
+  ],
+  'destination': 'Sed sed nisi sed augue convallis suscipit in sed felis. ',
+  'photos': [
+    'http://picsum.photos/248/152?r=15',
+    'http://picsum.photos/248/152?r=85',
+    'http://picsum.photos/248/152?r=21',
+    'http://picsum.photos/248/152?r=21'
+  ],
+  'price': 548,
+  'startDate': '2022-01-23T03:44:38.211Z',
+  'endDate': '2022-01-26T22:41:38.211Z',
+  'isFavorite': true,
+};
