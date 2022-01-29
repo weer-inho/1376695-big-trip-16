@@ -18,11 +18,11 @@ export default class BoardPresenter {
   #sectionTripEvents = null;
   #tripEventsList = null;
   #filterModel = null;
+  #sortComponent = null;
 
   #HeaderComponent = new PageHeader();
   #MainComponent = new PageMain();
   #TripList =  new TripList();
-  #sortComponent = new MainSort();
   #noTripsComponent = new NoData();
   #tripNewPresenter = null;
 
@@ -103,9 +103,9 @@ export default class BoardPresenter {
     }
 
     this.#sortTrips(sortType);
-    this.#clearTripList();
-    this.#renderTripItems();
+    this.#clearBoard();
     this.#currentSortType = sortType;
+    this.#renderBoard();
   }
 
   #handleModeChange = () => {
@@ -184,8 +184,9 @@ export default class BoardPresenter {
   }
 
   #renderSort = () => {
-    render(this.#sectionTripEvents, this.#sortComponent);
+    this.#sortComponent = new MainSort(this.#currentSortType);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+    render(this.#sectionTripEvents, this.#sortComponent);
   }
 
   #renderMain = () => {
