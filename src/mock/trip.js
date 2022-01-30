@@ -58,7 +58,7 @@ export const generateTrip = () => {
     photos: generatePhoto(),
     price: getRandomInteger(1, 10000),
     startDate: dayjs().add(- Math.floor(Math.random()*10000), 'minute').toDate(),
-    endDate: dayjs().add(Math.floor(Math.random()*1000), 'minute').toDate(),
+    endDate: dayjs().add(+Math.floor(Math.random()*10000), 'minute').toDate(),
     isFavorite: Boolean(getRandomInteger(0,1)),
   };
 };

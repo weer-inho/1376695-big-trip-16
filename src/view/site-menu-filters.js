@@ -41,6 +41,5 @@ export default class SiteFilters extends AbstractView {
   #filterTypeChangeHandler = (evt) => {
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.value);
-    console.log(evt.target.value)
   }
 }

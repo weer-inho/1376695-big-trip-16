@@ -1,6 +1,5 @@
 import SiteFilters from '../view/site-menu-filters.js';
-import dayjs from 'dayjs';
-import {render, replace, remove, UpdateType} from '../utils.js';
+import {render, remove, UpdateType} from '../utils.js';
 
 export default class FilterPresenter {
   #filterContainer = null;
@@ -14,7 +13,7 @@ export default class FilterPresenter {
     this.#filterModel = filterModel;
     this.#tripsModel = tripsModel;
 
-    // this.#tripsModel.addObserver(this.#handleModelEvent);
+    this.#tripsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
@@ -26,13 +25,12 @@ export default class FilterPresenter {
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this.#filterContainer, this.#filterComponent);
-      console.log('Отрендерил')
+      render(this.#filterContainer.querySelector('.trip-controls__filters'), this.#filterComponent);
       return;
     }
 
-    replace(this.#filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
+    render(this.#filterContainer.querySelector('.trip-controls__filters'), this.#filterComponent);
   }
 
   #handleModelEvent = () => {

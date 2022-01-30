@@ -9,7 +9,7 @@ import NoData from '../view/no-data.js';
 import TripNewPresenter from './trip-new-presenter.js';
 import FilterPresenter from './filter-presenter.js';
 import TripPresenter from './trip-presenter.js';
-import { getTotalCost, getThreeRoutePoints, render, remove, updateItem, UserAction, UpdateType } from '../utils.js';
+import { getTotalCost, getThreeRoutePoints, render, remove, updateItem, UserAction, UpdateType, filter } from '../utils.js';
 import { SortType, sortPrice, sortTime } from '../mock/data.js';
 
 export default class BoardPresenter {
@@ -53,22 +53,20 @@ export default class BoardPresenter {
   }
 
   get trips() {
-    console.log('я дошел до борды');
-
     const filterType = this.#filterModel.filter;
     const trips = this.#tripsModel.trips;
     const filteredTasks = filter[filterType](trips);
 
     switch (this.#currentSortType) {
       case SortType.PRICE:
-        return this.#tripsModel.trips.sort(sortPrice);
+        return filteredTasks.sort(sortPrice);
       case SortType.TIME:
-        return this.#tripsModel.trips.sort(sortTime);
+        return filteredTasks.sort(sortTime);
       case SortType.DEFAULT:
-        return [...this.#tripsModel.trips];
+        return [...filteredTasks];
       default:
     }
-    return this.#tripsModel.trips;
+    return filteredTasks.trips;
   }
 
   #handleViewAction = (actionType, updateType, update) => {
@@ -187,7 +185,8 @@ export default class BoardPresenter {
   }
 
   #renderTripItems = () => {
-    this.#tripsModel.trips.forEach((trip) => this.#renderTrip(trip));
+    // this.#tripsModel.trips.forEach((trip) => this.#renderTrip(trip));
+    this.trips.forEach((trip) => this.#renderTrip(trip));
   }
 
   #renderSort = () => {

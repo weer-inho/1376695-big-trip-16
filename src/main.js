@@ -11,11 +11,12 @@ const tripsModel = new TripsModel();
 tripsModel.trips = trips;
 
 const filterModel = new FilterModel();
+const body = document.querySelector('.page-body');
 
-const boardPresenter = new BoardPresenter(document.querySelector('.page-body'), tripsModel, filterModel);
+const boardPresenter = new BoardPresenter(body, tripsModel, filterModel);
 boardPresenter.init();
 
-const filterPresenter = new FilterPresenter(document.querySelector('.page-body').querySelector('.trip-controls__filters'), filterModel);
+const filterPresenter = new FilterPresenter(body, filterModel, tripsModel);
 filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {

@@ -1,5 +1,6 @@
 import AbstractView from './view/abstract-view';
 import flatpickr from 'flatpickr';
+import dayjs from 'dayjs';
 
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -134,17 +135,17 @@ export const testEditObject = {
   'isFavorite': true,
 };
 
-const isDateFuture = (date) => dayjs(date).diff(dayjs()) > 0;
-const isDatePast = (date) => dayjs().diff(dayjs(date)) > 0;
+export const isDateFuture = (date) => dayjs(date).diff(dayjs()) > 0;
+export const isDatePast = (date) => dayjs().diff(dayjs(date)) > 0;
 
 export const FilterType = {
-  ALL: 'all',
-  OVERDUE: 'overdue',
-  TODAY: 'today',
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
 };
 
 export const filter = {
-  [FilterType.ALL]: (tasks) => tasks.filter((task) => console.log('все')),
-  [FilterType.OVERDUE]: (tasks) => tasks.filter((task) => console.log('футуре')),
-  [FilterType.TODAY]: (tasks) => tasks.filter((task) => console.log('паст')),
+  [FilterType.EVERYTHING]: (tasks) => tasks,
+  [FilterType.FUTURE]: (tasks) => tasks.filter((task) => isDateFuture(task.startDate)),
+  [FilterType.PAST]: (tasks) => tasks.filter((task) => isDatePast(task.endDate)),
 };
