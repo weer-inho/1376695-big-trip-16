@@ -97,11 +97,11 @@ export const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-export const FilterType = {
-  EVERYTHING: 'EVERYTHING',
-  FUTURE: 'FUTURE',
-  PAST: 'PAST',
-};
+// export const FilterType = {
+//   EVERYTHING: 'EVERYTHING',
+//   FUTURE: 'FUTURE',
+//   PAST: 'PAST',
+// };
 
 export const testEditObject = {
   'id': 'UgUoiHHwUOLEb6m8eqIdW',
@@ -132,4 +132,19 @@ export const testEditObject = {
   'startDate': '2022-01-23T03:44:38.211Z',
   'endDate': '2022-01-26T22:41:38.211Z',
   'isFavorite': true,
+};
+
+const isDateFuture = (date) => dayjs(date).diff(dayjs()) > 0;
+const isDatePast = (date) => dayjs().diff(dayjs(date)) > 0;
+
+export const FilterType = {
+  ALL: 'all',
+  OVERDUE: 'overdue',
+  TODAY: 'today',
+};
+
+export const filter = {
+  [FilterType.ALL]: (tasks) => tasks.filter((task) => console.log('все')),
+  [FilterType.OVERDUE]: (tasks) => tasks.filter((task) => console.log('футуре')),
+  [FilterType.TODAY]: (tasks) => tasks.filter((task) => console.log('паст')),
 };

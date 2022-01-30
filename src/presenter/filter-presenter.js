@@ -1,4 +1,5 @@
 import SiteFilters from '../view/site-menu-filters.js';
+import dayjs from 'dayjs';
 import {render, replace, remove, UpdateType} from '../utils.js';
 
 export default class FilterPresenter {
@@ -13,22 +14,20 @@ export default class FilterPresenter {
     this.#filterModel = filterModel;
     this.#tripsModel = tripsModel;
 
-    this.#tripsModel.addObserver(this.#handleModelEvent);
+    // this.#tripsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-  }
-
-  get filters() {
-    const trips = this.#tripsModel.trips;
   }
 
   init = () => {
     const prevFilterComponent = this.#filterComponent;
 
-    this.#filterComponent = new SiteFilters();
+    this.#filterComponent = new SiteFilters(this.#filterModel.filter);
+
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
       render(this.#filterContainer, this.#filterComponent);
+      console.log('Отрендерил')
       return;
     }
 

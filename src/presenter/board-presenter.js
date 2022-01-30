@@ -34,10 +34,11 @@ export default class BoardPresenter {
   constructor(tripContainer, tripsModel, filterModel) {
     this.#tripContainer = tripContainer;
     this.#tripsModel = tripsModel;
-    this.#filterModel = tripsModel;
+    this.#filterModel = filterModel;
     this.#sourcedBoardTrips = [...this.#tripsModel.trips];
 
     this.#tripsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
     this.#tripNewPresenter = new TripNewPresenter(this.#tripContainer, this.#handleViewAction);
   }
 
@@ -52,6 +53,12 @@ export default class BoardPresenter {
   }
 
   get trips() {
+    console.log('я дошел до борды');
+
+    const filterType = this.#filterModel.filter;
+    const trips = this.#tripsModel.trips;
+    const filteredTasks = filter[filterType](trips);
+
     switch (this.#currentSortType) {
       case SortType.PRICE:
         return this.#tripsModel.trips.sort(sortPrice);
@@ -168,7 +175,7 @@ export default class BoardPresenter {
   }
 
   #renderFilter = () => {
-    const filterPresenter = new FilterPresenter(this.#tripContainer.querySelector('.trip-controls__filters'), this.#filterModel, this.#tripsModel);
+    const filterPresenter = new FilterPresenter(this.#tripContainer.querySelector('.trip-controls__filters'), this.#filterModel);
     filterPresenter.init();
   }
 
@@ -176,7 +183,7 @@ export default class BoardPresenter {
     render(this.#tripContainer, this.#HeaderComponent);
     this.#renderInfo();
     this.#renderNavigation();
-    this.#renderFilter();
+    // this.#renderFilter();
   }
 
   #renderTripItems = () => {
